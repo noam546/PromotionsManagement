@@ -7,7 +7,6 @@ import {
   PromotionCreatedMessage,
   PromotionUpdatedMessage,
   PromotionDeletedMessage,
-  PromotionStatusChangedMessage
 } from '../api/types/websocketTypes';
 
 interface UseWebSocketOptions {
@@ -26,7 +25,6 @@ interface UseWebSocketReturn {
   onPromotionCreated: (callback: (data: WebSocketMessage<PromotionCreatedMessage>) => void) => void;
   onPromotionUpdated: (callback: (data: WebSocketMessage<PromotionUpdatedMessage>) => void) => void;
   onPromotionDeleted: (callback: (data: WebSocketMessage<PromotionDeletedMessage>) => void) => void;
-  onPromotionStatusChanged: (callback: (data: WebSocketMessage<PromotionStatusChangedMessage>) => void) => void;
   onConnect: (callback: (data: WebSocketMessage) => void) => void;
   onDisconnect: (callback: (data: WebSocketMessage) => void) => void;
   onError: (callback: (data: WebSocketMessage) => void) => void;
@@ -93,10 +91,6 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     addEventListener(WebSocketEventType.PROMOTION_DELETED, callback);
   }, [addEventListener]);
 
-  const onPromotionStatusChanged = useCallback((callback: (data: WebSocketMessage<PromotionStatusChangedMessage>) => void) => {
-    addEventListener(WebSocketEventType.PROMOTION_STATUS_CHANGED, callback);
-  }, [addEventListener]);
-
   const onConnect = useCallback((callback: (data: WebSocketMessage) => void) => {
     addEventListener(WebSocketEventType.CONNECT, callback);
   }, [addEventListener]);
@@ -126,7 +120,6 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     };
   }, [updateConnectionStatus]);
 
-  // Auto-connect on mount
   useEffect(() => {
     if (autoConnect && !webSocketService.isConnected()) {
       connect();
@@ -154,7 +147,6 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     onPromotionCreated,
     onPromotionUpdated,
     onPromotionDeleted,
-    onPromotionStatusChanged,
     onConnect,
     onDisconnect,
     onError,

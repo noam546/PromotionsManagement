@@ -12,15 +12,12 @@ export const useWebSocketTableUpdates = () => {
   } = useWebSocket();
 
   useEffect(() => {
-    // Handle new promotion created
+
     onPromotionCreated((data) => {
       console.log('WebSocket: Promotion created', data.data.promotion);
       
-      // Invalidate and refetch the promotions query
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       
-      // Optionally, you can also optimistically add the new promotion to the cache
-      // This provides instant UI updates without waiting for refetch
       queryClient.setQueryData(['promotions'], (oldData: any) => {
         if (!oldData) return oldData;
         
@@ -36,14 +33,11 @@ export const useWebSocketTableUpdates = () => {
       });
     });
 
-    // Handle promotion updated
     onPromotionUpdated((data) => {
       console.log('WebSocket: Promotion updated', data.data.promotion);
       
-      // Invalidate and refetch the promotions query
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       
-      // Optionally, you can also optimistically update the promotion in the cache
       queryClient.setQueryData(['promotions'], (oldData: any) => {
         if (!oldData) return oldData;
         const newData = { ...oldData };
@@ -62,14 +56,11 @@ export const useWebSocketTableUpdates = () => {
       });
     });
 
-    // Handle promotion deleted
     onPromotionDeleted((data) => {
       console.log('WebSocket: Promotion deleted', data.data.promotionId);
       
-      // Invalidate and refetch the promotions query
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       
-      // Optionally, you can also optimistically remove the promotion from the cache
       queryClient.setQueryData(['promotions'], (oldData: any) => {
         if (!oldData) return oldData;
         

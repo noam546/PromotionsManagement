@@ -115,7 +115,7 @@ function PromotionsTableWithWebSocket() {
         <VirtualizedTable<Promotion, GetPromotionsResponse>
           queryOptions={createPromotionsInfiniteQueryOptions()}
           dataExtractor={(response) => response.promotions}
-          headers={['Promotion Name', 'Type', 'Start Date', 'End Date', 'User Group Name', 'Actions']}
+          headers={['Promotion Name', 'Type', 'Start Date', 'End Date', 'User Group Name','']}
           renderItem={(promotion, _) => (
             <>
               <td>{promotion.promotionName}</td>
