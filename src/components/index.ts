@@ -6,3 +6,7 @@ export { default as PromotionsTableWithHighlights } from './PromotionsTableWithH
 export { default as VirtualizedTable } from './VirtualizedTable';
 export { WebSocketStatus } from './WebSocketStatus';
 export { WebSocketNotifications } from './WebSocketNotifications';
+export { default as PromotionForm } from './PromotionForm';
+export { default as Modal } from './Modal';
+export { default as DeleteConfirmation } from './DeleteConfirmation';
+export { default as EnhancedPromotionsTable } from './EnhancedPromotionsTable';

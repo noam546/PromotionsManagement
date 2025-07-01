@@ -55,7 +55,7 @@ export default function VirtualizedTable<TData, TResponse>({
         width: '100%',
       }}
     >
-      <h1 style={{ textAlign: 'center' }}>Promotions</h1>
+      
       <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
         <colgroup>
           {headers.map((_, index) => (
