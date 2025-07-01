@@ -47,15 +47,13 @@ export const useWebSocketTableUpdates = () => {
       // Optionally, you can also optimistically update the promotion in the cache
       queryClient.setQueryData(['promotions'], (oldData: any) => {
         if (!oldData) return oldData;
-        
         const newData = { ...oldData };
         if (newData.pages) {
           newData.pages = newData.pages.map((page: any) => {
             if (page.promotions) {
               page.promotions = page.promotions.map((promotion: Promotion) => 
-                promotion.id === data.data.promotion.id 
-                  ? data.data.promotion 
-                  : promotion
+                promotion.id === data.data.promotion.id? 
+                {...data.data.promotion, ...promotion} : promotion
               );
             }
             return page;
