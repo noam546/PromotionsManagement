@@ -1,6 +1,7 @@
 import { z } from "zod"
 
 export const promotionSchema = z.object({
+  id: z.string(),
   promotionName: z.string(),
   type: z.string(),
   startDate: z.string(),
@@ -29,10 +30,3 @@ export const GetPromotionsParamsSchema = z.object({
 
 export type GetPromotionsOptions = z.infer<typeof GetPromotionsParamsSchema>
 
-export const promotion = {
-  promotionName: "Promotion 1",
-  type: "Type 1",
-  startDate: new Date().toDateString(),
-  endDate: new Date().toDateString(),
-  userGroupName: "Group 1",
-}

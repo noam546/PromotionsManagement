@@ -4,7 +4,7 @@ import { getPromotions } from "./api/promotion"
 export default function createPromotionsInfiniteQueryOptions() {
   return infiniteQueryOptions({
     queryKey: ["promotions"],
-    queryFn: ({ pageParam = 1 }) => getPromotions({ page: pageParam, limit: 200 }),
+    queryFn: ({ pageParam = 1 }) => getPromotions({ page: pageParam, limit: 50 }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       return lastPage.pagination.hasMore
