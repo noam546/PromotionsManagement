@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useWebSocket } from '../hooks/useWebSocket';
-import { WebSocketMessage, WebSocketEventType } from '../api/types/websocketTypes';
+import { WebSocketEventType } from '../api/types/websocketTypes';
 
 interface Notification {
   id: string;

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useWebSocket } from './useWebSocket';
-import { WebSocketEventType } from '../api/types/websocketTypes';
 import { Promotion } from '../api/types/promotionType';
 
 export const useWebSocketTableUpdates = () => {

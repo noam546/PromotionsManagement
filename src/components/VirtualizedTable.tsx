@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 
 interface VirtualizedTableProps<TData, TResponse> {
@@ -25,7 +25,7 @@ export default function VirtualizedTable<TData, TResponse>({
     useInfiniteQuery(queryOptions)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const items = data?.pages.flatMap((page: unknown) => dataExtractor(page as TResponse)) ?? []
+  const items = useMemo(() => data?.pages.flatMap((page: unknown) => dataExtractor(page as TResponse)) ?? [], [data, dataExtractor])
 
   const virtualizer = useVirtualizer({
     count: items?.length ?? 0,
