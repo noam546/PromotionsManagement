@@ -1,14 +1,15 @@
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import VirtualizedTable from './VirtualizedTable';
 import { GetPromotionsResponse, Promotion } from '../api/types/promotionType';
 import createPromotionsInfiniteQueryOptions from '../createPromotionsInfiniteQueryOptions';
+import { useWebSocketTableUpdates } from '../hooks/useWebSocketTableUpdates';
 
 const queryClient = new QueryClient()
 
-export default function PromotionsVirtualizedTable() {
+function PromotionsTableWithWebSocket() {
+  useWebSocketTableUpdates();
+
   return (
-    <QueryClientProvider client={queryClient}>
     <VirtualizedTable<Promotion, GetPromotionsResponse>
       queryOptions={createPromotionsInfiniteQueryOptions()}
       dataExtractor={(response) => response.promotions}
@@ -23,7 +24,13 @@ export default function PromotionsVirtualizedTable() {
         </tr>
       )}
     />
-    </QueryClientProvider>
+  );
+}
 
+export default function PromotionsVirtualizedTable() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <PromotionsTableWithWebSocket />
+    </QueryClientProvider>
   );
 } 

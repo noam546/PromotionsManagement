@@ -1,7 +1,7 @@
 import { GetPromotionsOptions } from "./types/promotionType";
 import { Promotion } from "./types/promotionType";
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 export const getPromotions = async (options?: GetPromotionsOptions) => {
     
