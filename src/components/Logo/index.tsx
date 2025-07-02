@@ -1,4 +1,3 @@
-import React from 'react'
 import MoonActiveLogo from './moonactive.svg'
 
 const Logo = () =>

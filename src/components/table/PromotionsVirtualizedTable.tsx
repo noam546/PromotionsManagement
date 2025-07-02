@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import createPromotionsInfiniteQueryOptions from '../createPromotionsInfiniteQueryOptions';
-import { useWebSocketTableUpdates } from '../hooks';
-import { GetPromotionsResponse, Promotion } from '../api';
+import createPromotionsInfiniteQueryOptions from '../../createPromotionsInfiniteQueryOptions';
+import { useWebSocketTableUpdates } from '../../hooks';
+import { GetPromotionsResponse, Promotion } from '../../api';
 import VirtualizedTable from './VirtualizedTable';
 
 const queryClient = new QueryClient()
