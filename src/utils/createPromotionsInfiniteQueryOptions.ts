@@ -1,5 +1,5 @@
 import { infiniteQueryOptions } from "@tanstack/react-query"
-import { getPromotions } from "./api/promotion"
+import { getPromotions } from "../api/promotion"
 
 export default function createPromotionsInfiniteQueryOptions() {
   return infiniteQueryOptions({
