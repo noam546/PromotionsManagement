@@ -16,6 +16,7 @@ export const useWebSocketTableUpdates = () => {
     onPromotionCreated((data) => {
       console.log('WebSocket: Promotion created', data.data.promotion);
       
+      // Invalidate all promotions queries (with and without filters)
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       
       queryClient.setQueryData(['promotions'], (oldData: any) => {
@@ -36,6 +37,7 @@ export const useWebSocketTableUpdates = () => {
     onPromotionUpdated((data) => {
       console.log('WebSocket: Promotion updated', data.data.promotion);
       
+      // Invalidate all promotions queries (with and without filters)
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       
       queryClient.setQueryData(['promotions'], (oldData: any) => {
@@ -59,6 +61,7 @@ export const useWebSocketTableUpdates = () => {
     onPromotionDeleted((data) => {
       console.log('WebSocket: Promotion deleted', data.data.promotionId);
       
+      // Invalidate all promotions queries (with and without filters)
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       
       queryClient.setQueryData(['promotions'], (oldData: any) => {
