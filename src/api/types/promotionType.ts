@@ -7,6 +7,7 @@ export const promotionSchema = z.object({
   startDate: z.string(),
   endDate: z.string(),
   userGroupName: z.string(),
+  createdAt: z.string().optional(),
 })
 
 export type Promotion = z.infer<typeof promotionSchema>

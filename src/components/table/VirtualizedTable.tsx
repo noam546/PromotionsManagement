@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useVirtualizer } from "@tanstack/react-virtual"
+import { ArrowUpIcon, ArrowDownIcon, ArrowUpDownIcon } from "../Icons";
 
 interface SortableHeader {
   key: string;
@@ -21,6 +22,7 @@ interface VirtualizedTableProps<TData, TResponse> {
     sortBy: string;
     sortOrder: 'asc' | 'desc';
   }
+  onLoadingChange?: (isLoading: boolean) => void
 }
 
 export default function VirtualizedTable<TData, TResponse>({
@@ -32,13 +34,21 @@ export default function VirtualizedTable<TData, TResponse>({
   containerHeight = '50vh',
   containerMaxWidth = '100%',
   onSortChange,
-  currentSort
+  currentSort,
+  onLoadingChange
 }: VirtualizedTableProps<TData, TResponse>) {
-  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading, isFetching } =
     useInfiniteQuery(queryOptions)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const items = useMemo(() => data?.pages.flatMap((page: unknown) => dataExtractor(page as TResponse)) ?? [], [data, dataExtractor])
+
+  // Notify parent component of loading state changes
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(isLoading || isFetching);
+    }
+  }, [isLoading, isFetching, onLoadingChange]);
 
   const virtualizer = useVirtualizer({
     count: items?.length ?? 0,
@@ -69,9 +79,11 @@ export default function VirtualizedTable<TData, TResponse>({
 
   const getSortIndicator = (headerKey: string) => {
     if (!currentSort || currentSort.sortBy !== headerKey) {
-      return '↕️'; // Neutral indicator
+      return <ArrowUpDownIcon width="10" height="10" fill="white" />;
     }
-    return currentSort.sortOrder === 'asc' ? '↑' : '↓';
+    return currentSort.sortOrder !== 'asc' ? 
+      <ArrowUpIcon width="10" height="10" fill="white" /> : 
+      <ArrowDownIcon width="10" height="10" fill="white" />;
   };
 
   return (

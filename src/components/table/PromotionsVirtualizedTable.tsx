@@ -13,6 +13,7 @@ function PromotionsTableWithWebSocket() {
   useWebSocketTableUpdates();
   
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
   
   const [filters, setFilters] = useState<Omit<GetPromotionsOptions, 'page' | 'limit'>>(() => ({
     search: searchParams.get('search') || undefined,
@@ -20,7 +21,7 @@ function PromotionsTableWithWebSocket() {
     userGroupName: undefined,
     startDate: searchParams.get('startDate') || undefined,
     endDate: searchParams.get('endDate') || undefined,
-    sortBy: searchParams.get('sortBy') || 'promotionName',
+    sortBy: searchParams.get('sortBy') || 'createdAt',
     sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
   }));
 
@@ -57,6 +58,10 @@ function PromotionsTableWithWebSocket() {
     updateURL(updatedFilters);
   }, [filters, updateURL]);
 
+  const handleLoadingChange = useCallback((loading: boolean) => {
+    setIsLoading(loading);
+  }, []);
+
   useEffect(() => {
     const urlFilters = {
       search: searchParams.get('search') || undefined,
@@ -64,12 +69,13 @@ function PromotionsTableWithWebSocket() {
       userGroupName: undefined,
       startDate: searchParams.get('startDate') || undefined,
       endDate: searchParams.get('endDate') || undefined,
-      sortBy: searchParams.get('sortBy') || 'promotionName',
+      sortBy: searchParams.get('sortBy') || 'createdAt',
       sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
     };
     
     setFilters(urlFilters);
   }, [searchParams]);
+
 
   const headers = [
     { key: 'promotionName', label: 'Promotion Name', sortable: true },
@@ -77,12 +83,13 @@ function PromotionsTableWithWebSocket() {
     { key: 'startDate', label: 'Start Date', sortable: true },
     { key: 'endDate', label: 'End Date', sortable: true },
     { key: 'userGroupName', label: 'User Group Name', sortable: true },
+    { key: 'createdAt', label: 'Created At', sortable: true },
   ];
 
   return (
     <>
       <h1>Promotions</h1>
-      <PromotionsFilters onFiltersChange={handleFiltersChange} />
+      <PromotionsFilters onFiltersChange={handleFiltersChange} isLoading={isLoading} />
       <div>
         <VirtualizedTable<Promotion, GetPromotionsResponse>
           queryOptions={createPromotionsInfiniteQueryOptions(filters)}
@@ -91,9 +98,10 @@ function PromotionsTableWithWebSocket() {
           headers={headers}
           onSortChange={handleSortChange}
           currentSort={{
-            sortBy: filters.sortBy || 'promotionName',
+            sortBy: filters.sortBy || 'createdAt',
             sortOrder: filters.sortOrder || 'desc',
           }}
+          onLoadingChange={handleLoadingChange}
           renderItem={(promotion, _) => (
             <>
               <td>{promotion.promotionName}</td>
@@ -103,6 +111,7 @@ function PromotionsTableWithWebSocket() {
               <td>{promotion.startDate}</td>
               <td>{promotion.endDate}</td>
               <td>{promotion.userGroupName}</td>
+              <td>{promotion.createdAt || 'N/A'}</td>
             </>
           )}
           />
