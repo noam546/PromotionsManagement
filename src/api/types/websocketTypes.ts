@@ -4,7 +4,6 @@ export enum WebSocketEventType {
   PROMOTION_CREATED = 'promotion_created',
   PROMOTION_UPDATED = 'promotion_updated',
   PROMOTION_DELETED = 'promotion_deleted',
-  PROMOTION_STATUS_CHANGED = 'promotion_status_changed',
   CONNECT = 'connect',
   DISCONNECT = 'disconnect',
   ERROR = 'error'
@@ -28,12 +27,6 @@ export interface PromotionUpdatedMessage {
 
 export interface PromotionDeletedMessage {
   promotionId: string;
-}
-
-export interface PromotionStatusChangedMessage {
-  promotionId: string;
-  newStatus: string;
-  previousStatus: string;
 }
 
 export interface WebSocketError {

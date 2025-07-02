@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { useVirtualizer } from "@tanstack/react-virtual"
 
 interface VirtualizedTableProps<TData, TResponse> {
@@ -53,6 +53,7 @@ export default function VirtualizedTable<TData, TResponse>({
         margin: '2rem auto',
         maxWidth: containerMaxWidth,
         width: '100%',
+        // paddingRight: '5px'
       }}
     >
       
@@ -76,7 +77,7 @@ export default function VirtualizedTable<TData, TResponse>({
           height: containerHeight,
           overflowY: 'auto',
           width: '100%',
-          position: 'relative',
+          position: 'relative'
         }}
       >
         <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', position: 'absolute', top: 0, left: 0 }}>

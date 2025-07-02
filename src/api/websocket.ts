@@ -3,12 +3,10 @@ import {
   WebSocketEventType, 
   WebSocketMessage, 
   WebSocketConnectionStatus,
-  WebSocketError,
   PromotionCreatedMessage,
   PromotionUpdatedMessage,
   PromotionDeletedMessage,
-  PromotionStatusChangedMessage
-} from './types/websocketTypes';
+} from './types';
 
 export class WebSocketService {
   private socket: Socket | null = null;
@@ -20,7 +18,7 @@ export class WebSocketService {
   private eventListeners: Map<WebSocketEventType, Set<Function>> = new Map();
   private reconnectInterval: NodeJS.Timeout | null = null;
   private maxReconnectAttempts = 5;
-  private reconnectDelay = 1000; // Start with 1 second
+  private reconnectDelay = 1000;
 
   constructor(private serverUrl: string = 'http://localhost:8000') {}
 
@@ -36,7 +34,7 @@ export class WebSocketService {
       this.socket = io(this.serverUrl, {
         transports: ['websocket', 'polling'],
         timeout: 20000,
-        reconnection: false, // We'll handle reconnection manually
+        reconnection: false,
         autoConnect: true
       });
 
@@ -64,7 +62,6 @@ export class WebSocketService {
         this.connectionStatus.lastDisconnected = new Date();
         this.emit(WebSocketEventType.DISCONNECT, { reason, timestamp: new Date().toISOString() });
 
-        // Attempt to reconnect if not manually disconnected
         if (reason !== 'io client disconnect' && reason !== 'io server disconnect') {
           this.attemptReconnect();
         }
@@ -81,7 +78,6 @@ export class WebSocketService {
         reject(error);
       });
 
-      // Handle promotion-specific events
       this.socket.on(WebSocketEventType.PROMOTION_CREATED, (data: PromotionCreatedMessage) => {
         this.handlePromotionEvent(WebSocketEventType.PROMOTION_CREATED, data);
       });
@@ -92,10 +88,6 @@ export class WebSocketService {
 
       this.socket.on(WebSocketEventType.PROMOTION_DELETED, (data: PromotionDeletedMessage) => {
         this.handlePromotionEvent(WebSocketEventType.PROMOTION_DELETED, data);
-      });
-
-      this.socket.on(WebSocketEventType.PROMOTION_STATUS_CHANGED, (data: PromotionStatusChangedMessage) => {
-        this.handlePromotionEvent(WebSocketEventType.PROMOTION_STATUS_CHANGED, data);
       });
     });
   }
@@ -179,14 +171,12 @@ export class WebSocketService {
     return this.connectionStatus.isConnected;
   }
 
-  // Method to join a specific room/channel for promotions
   joinPromotionsRoom(): void {
     if (this.socket?.connected) {
       this.socket.emit('join_promotions_room');
     }
   }
 
-  // Method to leave a specific room/channel
   leavePromotionsRoom(): void {
     if (this.socket?.connected) {
       this.socket.emit('leave_promotions_room');
@@ -194,5 +184,4 @@ export class WebSocketService {
   }
 }
 
-// Create a singleton instance
 export const webSocketService = new WebSocketService(); 
