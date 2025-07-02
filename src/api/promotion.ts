@@ -1,9 +1,8 @@
 import { GetPromotionsOptions } from "./types";
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export const getPromotions = async (options?: GetPromotionsOptions) => {
-    
     const params = new URLSearchParams();
     if (options?.page) params.append('page', options.page.toString());
     if (options?.limit) params.append('limit', options.limit.toString());

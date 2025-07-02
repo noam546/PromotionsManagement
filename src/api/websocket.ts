@@ -20,7 +20,7 @@ export class WebSocketService {
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
 
-  constructor(private serverUrl: string = 'http://localhost:8000') {}
+  constructor(private serverUrl: string = process.env.REACT_APP_WEBSOCKET_URL || 'http://localhost:8000') {}
 
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -39,7 +39,6 @@ export class WebSocketService {
       });
 
       this.socket.on('connect', () => {
-        console.log('WebSocket connected');
         this.connectionStatus.isConnected = true;
         this.connectionStatus.isConnecting = false;
         this.connectionStatus.lastConnected = new Date();
