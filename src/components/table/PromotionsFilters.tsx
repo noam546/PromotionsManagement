@@ -12,7 +12,6 @@ const spinAnimation = `
 
 interface PromotionsFiltersProps {
   onFiltersChange: (filters: Omit<GetPromotionsOptions, 'page' | 'limit'>) => void;
-  isLoading?: boolean;
 }
 
 const promotionTypes = [
@@ -21,7 +20,7 @@ const promotionTypes = [
   { value: 'basic', label: 'Basic' },
 ];
 
-export default function PromotionsFilters({ onFiltersChange, isLoading = false }: PromotionsFiltersProps) {
+export default function PromotionsFilters({ onFiltersChange }: PromotionsFiltersProps) {
   const [searchParams] = useSearchParams();
   
   // Initialize state from URL params
@@ -91,29 +90,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
           }}>
             Search & Filters
           </h3>
-          {isLoading && (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '4px 12px',
-              borderRadius: '20px',
-              background: 'rgba(255, 255, 255, 0.2)',
-              fontSize: '12px',
-              color: '#fff',
-              fontWeight: '500'
-            }}>
-              <div style={{
-                width: '12px',
-                height: '12px',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                borderTop: '2px solid #fff',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
-              }} />
-              Loading...
-            </div>
-          )}
         </div>
         
         <div style={{
@@ -149,7 +125,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
                 color: '#fff',
                 fontSize: '14px',
               }}
-              disabled={isLoading}
             />
           </div>
 
@@ -176,7 +151,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
                 color: '#fff',
                 fontSize: '14px',
               }}
-              disabled={isLoading}
             >
               <option value="">All Types</option>
               {promotionTypes.map(type => (
@@ -211,7 +185,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
                 color: '#fff',
                 fontSize: '14px',
               }}
-              disabled={isLoading}
             />
           </div>
 
@@ -239,7 +212,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
                 color: '#fff',
                 fontSize: '14px',
               }}
-              disabled={isLoading}
             />
           </div>
         </div>
@@ -252,7 +224,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
         }}>
           <button
             onClick={clearFilters}
-            disabled={isLoading}
             style={{
               padding: '10px 20px',
               borderRadius: '4px',
@@ -274,7 +245,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
           </button>
           <button
             onClick={applyFilters}
-            disabled={isLoading}
             style={{
               padding: '10px 20px',
               borderRadius: '4px',

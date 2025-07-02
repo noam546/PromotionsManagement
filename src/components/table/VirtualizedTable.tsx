@@ -3,6 +3,14 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { ArrowUpIcon, ArrowDownIcon, ArrowUpDownIcon } from "../Icons";
 
+// CSS for spinning animation
+const spinAnimation = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
 interface SortableHeader {
   key: string;
   label: string;
@@ -87,13 +95,16 @@ export default function VirtualizedTable<TData, TResponse>({
   };
 
   return (
-    <div
-      style={{
-        margin: '2rem auto',
-        maxWidth: containerMaxWidth,
-        width: '100%',
-      }}
-    >
+    <>
+      <style>{spinAnimation}</style>
+      <div
+        style={{
+          margin: '2rem auto',
+          maxWidth: containerMaxWidth,
+          width: '100%',
+        }}
+      >
+
       
       <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
         <colgroup>
@@ -160,6 +171,45 @@ export default function VirtualizedTable<TData, TResponse>({
           position: 'relative'
         }}
       >
+        {isLoading && (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: 'rgba(0, 0, 0, 0.1)',
+            zIndex: 10,
+            borderRadius: '8px'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              color: '#fff',
+              fontSize: '16px',
+              fontWeight: '500',
+              padding: '20px 30px',
+              background: 'rgba(0, 0, 0, 0.7)',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+            }}>
+              <div style={{
+                width: '20px',
+                height: '20px',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                borderTop: '2px solid #fff',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }} />
+              Loading promotions...
+            </div>
+          </div>
+        )}
         <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', position: 'absolute', top: 0, left: 0 }}>
           <tbody style={{ position: 'relative', display: 'block', height: virtualizer.getTotalSize() }}>
             {virtualItems.map((vItem) => {
@@ -197,6 +247,7 @@ export default function VirtualizedTable<TData, TResponse>({
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   )
 }

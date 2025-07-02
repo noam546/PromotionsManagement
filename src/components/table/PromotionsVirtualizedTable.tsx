@@ -83,13 +83,12 @@ function PromotionsTableWithWebSocket() {
     { key: 'startDate', label: 'Start Date', sortable: true },
     { key: 'endDate', label: 'End Date', sortable: true },
     { key: 'userGroupName', label: 'User Group Name', sortable: true },
-    { key: 'createdAt', label: 'Created At', sortable: true },
   ];
 
   return (
     <>
       <h1>Promotions</h1>
-      <PromotionsFilters onFiltersChange={handleFiltersChange} isLoading={isLoading} />
+      <PromotionsFilters onFiltersChange={handleFiltersChange} />
       <div>
         <VirtualizedTable<Promotion, GetPromotionsResponse>
           queryOptions={createPromotionsInfiniteQueryOptions(filters)}
@@ -111,7 +110,6 @@ function PromotionsTableWithWebSocket() {
               <td>{promotion.startDate}</td>
               <td>{promotion.endDate}</td>
               <td>{promotion.userGroupName}</td>
-              <td>{promotion.createdAt || 'N/A'}</td>
             </>
           )}
           />

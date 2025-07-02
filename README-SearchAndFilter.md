@@ -90,10 +90,11 @@ limit?: number           // Items per page
 
 2. **Enhanced VirtualizedTable Component** (`src/components/table/VirtualizedTable.tsx`)
    - **Clickable headers with sorting functionality**
-   - **Visual sort indicators (↑↓)**
+   - **Visual sort indicators (SVG icons)**
    - **Hover effects for sortable headers**
    - **Toggle sorting (asc/desc)**
    - **Sort state management**
+   - **Loading overlay on table during API requests (previous results remain visible)**
 
 3. **Enhanced API Client** (`src/api/promotion.ts`)
    - Updated to support all filter parameters
@@ -168,9 +169,9 @@ The `PromotionsVirtualizedTable` component now automatically includes:
 - **Interactive Headers**: All table headers are clickable
 - **Default Sorting**: Table is sorted by "Created At" (newest first) by default
 - **Visual Indicators**: 
-  - `↕️` - Neutral state (not currently sorted)
-  - `↑` - Ascending sort
-  - `↓` - Descending sort
+  - Up/down arrows - Neutral state (not currently sorted)
+  - Up arrow - Ascending sort
+  - Down arrow - Descending sort
 - **Toggle Behavior**: Click to sort ascending, click again to sort descending
 - **Hover Effects**: Headers highlight on hover to indicate clickability
 - **URL Persistence**: Sort state is saved in URL
