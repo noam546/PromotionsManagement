@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { GetPromotionsOptions } from '../../api/promotion';
 
@@ -22,6 +22,23 @@ const promotionTypes = [
   { value: 'cashback', label: 'Cashback' },
 ];
 
+// Debounce hook
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export default function PromotionsFilters({ onFiltersChange, isLoading = false }: PromotionsFiltersProps) {
   const [searchParams] = useSearchParams();
   
@@ -35,9 +52,12 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
     (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc'
   );
 
+  // Debounce search input with 300ms delay
+  const debouncedSearch = useDebounce(search, 1000);
+
   const updateFilters = useCallback(() => {
     const filters = {
-      search: search || undefined,
+      search: debouncedSearch || undefined,
       type: type || undefined,
       userGroupName: undefined, // Removed separate user group filter
       startDate: startDate || undefined,
@@ -46,7 +66,7 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
       sortOrder: sortOrder,
     };
     onFiltersChange(filters);
-  }, [search, type, startDate, endDate, sortBy, sortOrder, onFiltersChange]);
+  }, [debouncedSearch, type, startDate, endDate, sortBy, sortOrder, onFiltersChange]);
 
   const clearFilters = useCallback(() => {
     setSearch('');
@@ -65,7 +85,7 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
     });
   }, [onFiltersChange]);
 
-  // Update filters whenever any value changes
+  // Update filters whenever any value changes (except search - uses debounced value)
   useEffect(() => {
     updateFilters();
   }, [updateFilters]);
@@ -131,6 +151,16 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
             }}
             disabled={isLoading}
           />
+          {search !== debouncedSearch && (
+            <div style={{
+              fontSize: '11px',
+              color: 'rgba(255, 255, 255, 0.7)',
+              marginTop: '4px',
+              fontStyle: 'italic'
+            }}>
+              Typing... (search will update in a moment)
+            </div>
+          )}
         </div>
 
         {/* Type Filter */}
