@@ -171,6 +171,47 @@ export default function VirtualizedTable<TData, TResponse>({
           position: 'relative'
         }}
       >
+        {!isLoading && items.length === 0 && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            color: '#fff',
+            fontSize: '16px',
+            textAlign: 'center',
+            padding: '40px'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px',
+              maxWidth: '400px'
+            }}>
+              <div style={{
+                fontSize: '48px',
+                opacity: 0.5
+              }}>
+                📭
+              </div>
+              <div style={{
+                fontSize: '20px',
+                fontWeight: '500',
+                marginBottom: '8px'
+              }}>
+                No promotions found
+              </div>
+              <div style={{
+                fontSize: '14px',
+                opacity: 0.7,
+                lineHeight: '1.5'
+              }}>
+                Try adjusting your search criteria or filters to find what you're looking for.
+              </div>
+            </div>
+          </div>
+        )}
         {isLoading && (
           <div style={{
             position: 'absolute',
@@ -210,32 +251,34 @@ export default function VirtualizedTable<TData, TResponse>({
             </div>
           </div>
         )}
-        <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', position: 'absolute', top: 0, left: 0 }}>
-          <tbody style={{ position: 'relative', display: 'block', height: virtualizer.getTotalSize() }}>
-            {virtualItems.map((vItem) => {
-              const item = items?.[vItem.index]
-              if (!item) return null
-              return (
-                <tr
-                  key={vItem.key}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    transform: `translateY(${vItem.start}px)`,
-                    height: `${vItem.size}px`,
-                    display: 'table',
-                    tableLayout: 'fixed',
-                  }}
-                  data-index={vItem.index}
-                >
-                  {renderItem(item, vItem.index)}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        {items.length > 0 && (
+          <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', position: 'absolute', top: 0, left: 0 }}>
+            <tbody style={{ position: 'relative', display: 'block', height: virtualizer.getTotalSize() }}>
+              {virtualItems.map((vItem) => {
+                const item = items?.[vItem.index]
+                if (!item) return null
+                return (
+                  <tr
+                    key={vItem.key}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      transform: `translateY(${vItem.start}px)`,
+                      height: `${vItem.size}px`,
+                      display: 'table',
+                      tableLayout: 'fixed',
+                    }}
+                    data-index={vItem.index}
+                  >
+                    {renderItem(item, vItem.index)}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        )}
         {isFetchingNextPage && (
           <div style={{
             display: 'flex',

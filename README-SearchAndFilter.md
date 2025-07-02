@@ -95,6 +95,7 @@ limit?: number           // Items per page
    - **Toggle sorting (asc/desc)**
    - **Sort state management**
    - **Loading overlay on table during API requests (previous results remain visible)**
+   - **No results view when search/filters return empty data**
 
 3. **Enhanced API Client** (`src/api/promotion.ts`)
    - Updated to support all filter parameters
@@ -148,6 +149,7 @@ The `PromotionsVirtualizedTable` component now automatically includes:
 - **Backend Logic**: Your backend should search across `promotionName` and `userGroupName` fields
 - **Manual Updates**: Results update only when Apply button is clicked
 - **Empty Search**: Shows all promotions when search is empty
+- **No Results Handling**: Displays friendly message when no results are found
 - **URL Persistence**: Search term is saved in URL
 
 ### Type Filter
