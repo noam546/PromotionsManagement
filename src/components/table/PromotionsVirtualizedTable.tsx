@@ -20,7 +20,7 @@ function PromotionsTableWithWebSocket() {
     userGroupName: undefined,
     startDate: searchParams.get('startDate') || undefined,
     endDate: searchParams.get('endDate') || undefined,
-    sortBy: searchParams.get('sortBy') || 'createdAt',
+    sortBy: searchParams.get('sortBy') || 'promotionName',
     sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
   }));
 
@@ -38,9 +38,24 @@ function PromotionsTableWithWebSocket() {
   }, [setSearchParams]);
 
   const handleFiltersChange = useCallback((newFilters: Omit<GetPromotionsOptions, 'page' | 'limit'>) => {
-    setFilters(newFilters);
-    updateURL(newFilters);
-  }, [updateURL]);
+    const updatedFilters = {
+      ...newFilters,
+      sortBy: filters.sortBy,
+      sortOrder: filters.sortOrder,
+    };
+    setFilters(updatedFilters);
+    updateURL(updatedFilters);
+  }, [filters.sortBy, filters.sortOrder, updateURL]);
+
+  const handleSortChange = useCallback((sortBy: string, sortOrder: 'asc' | 'desc') => {
+    const updatedFilters = {
+      ...filters,
+      sortBy,
+      sortOrder,
+    };
+    setFilters(updatedFilters);
+    updateURL(updatedFilters);
+  }, [filters, updateURL]);
 
   useEffect(() => {
     const urlFilters = {
@@ -49,16 +64,20 @@ function PromotionsTableWithWebSocket() {
       userGroupName: undefined,
       startDate: searchParams.get('startDate') || undefined,
       endDate: searchParams.get('endDate') || undefined,
-      sortBy: searchParams.get('sortBy') || 'createdAt',
+      sortBy: searchParams.get('sortBy') || 'promotionName',
       sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
     };
     
     setFilters(urlFilters);
   }, [searchParams]);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
-  };
+  const headers = [
+    { key: 'promotionName', label: 'Promotion Name', sortable: true },
+    { key: 'type', label: 'Type', sortable: true },
+    { key: 'startDate', label: 'Start Date', sortable: true },
+    { key: 'endDate', label: 'End Date', sortable: true },
+    { key: 'userGroupName', label: 'User Group Name', sortable: true },
+  ];
 
   return (
     <>
@@ -69,15 +88,20 @@ function PromotionsTableWithWebSocket() {
           queryOptions={createPromotionsInfiniteQueryOptions(filters)}
           dataExtractor={(response) => response.promotions}
           containerMaxWidth='calc(100% - 10px)'
-          headers={['Promotion Name', 'Type', 'Start Date', 'End Date', 'User Group Name']}
+          headers={headers}
+          onSortChange={handleSortChange}
+          currentSort={{
+            sortBy: filters.sortBy || 'promotionName',
+            sortOrder: filters.sortOrder || 'desc',
+          }}
           renderItem={(promotion, _) => (
             <>
               <td>{promotion.promotionName}</td>
               <td>
                   {promotion.type}
               </td>
-              <td>{formatDate(promotion.startDate)}</td>
-              <td>{formatDate(promotion.endDate)}</td>
+              <td>{promotion.startDate}</td>
+              <td>{promotion.endDate}</td>
               <td>{promotion.userGroupName}</td>
             </>
           )}

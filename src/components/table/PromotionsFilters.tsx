@@ -7,19 +7,10 @@ interface PromotionsFiltersProps {
   isLoading?: boolean;
 }
 
-const sortableFields = [
-  { value: 'promotionName', label: 'Promotion Name' },
-  { value: 'type', label: 'Type' },
-  { value: 'startDate', label: 'Start Date' },
-  { value: 'endDate', label: 'End Date' },
-  { value: 'userGroupName', label: 'User Group' },
-];
-
 const promotionTypes = [
-  { value: 'discount', label: 'Discount' },
-  { value: 'bonus', label: 'Bonus' },
-  { value: 'free_spin', label: 'Free Spin' },
-  { value: 'cashback', label: 'Cashback' },
+  { value: 'common', label: 'Common' },
+  { value: 'epic', label: 'Epic' },
+  { value: 'basic', label: 'Basic' },
 ];
 
 // Debounce hook
@@ -47,12 +38,8 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
   const [type, setType] = useState(searchParams.get('type') || '');
   const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');
   const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');
-  const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || 'createdAt');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(
-    (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc'
-  );
 
-  // Debounce search input with 300ms delay
+  // Debounce search input with 1000ms delay
   const debouncedSearch = useDebounce(search, 1000);
 
   const updateFilters = useCallback(() => {
@@ -62,26 +49,24 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
       userGroupName: undefined, // Removed separate user group filter
       startDate: startDate || undefined,
       endDate: endDate || undefined,
-      sortBy: sortBy || undefined,
-      sortOrder: sortOrder,
+      sortBy: undefined, // Will be handled by table headers
+      sortOrder: undefined, // Will be handled by table headers
     };
     onFiltersChange(filters);
-  }, [debouncedSearch, type, startDate, endDate, sortBy, sortOrder, onFiltersChange]);
+  }, [debouncedSearch, type, startDate, endDate, onFiltersChange]);
 
   const clearFilters = useCallback(() => {
     setSearch('');
     setType('');
     setStartDate('');
     setEndDate('');
-    setSortBy('createdAt');
-    setSortOrder('desc');
     onFiltersChange({
       search: undefined,
       type: undefined,
       startDate: undefined,
       endDate: undefined,
-      sortBy: 'createdAt',
-      sortOrder: 'desc',
+      sortBy: undefined,
+      sortOrder: undefined,
     });
   }, [onFiltersChange]);
 
@@ -96,8 +81,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
     setType(searchParams.get('type') || '');
     setStartDate(searchParams.get('startDate') || '');
     setEndDate(searchParams.get('endDate') || '');
-    setSortBy(searchParams.get('sortBy') || 'createdAt');
-    setSortOrder((searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc');
   }, [searchParams]);
 
   return (
@@ -119,13 +102,15 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
       </h3>
       
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        display: 'flex',
+        flexDirection: 'row',
         gap: '15px',
-        marginBottom: '20px'
+        marginBottom: '20px',
+        flexWrap: 'wrap',
+        alignItems: 'flex-end'
       }}>
         {/* Combined Search Input */}
-        <div>
+        <div style={{ flex: '1', minWidth: '200px' }}>
           <label style={{ 
             display: 'block', 
             marginBottom: '5px', 
@@ -164,7 +149,7 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
         </div>
 
         {/* Type Filter */}
-        <div>
+        <div style={{ flex: '0 0 150px' }}>
           <label style={{ 
             display: 'block', 
             marginBottom: '5px', 
@@ -198,7 +183,7 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
         </div>
 
         {/* Start Date */}
-        <div>
+        <div style={{ flex: '0 0 150px' }}>
           <label style={{ 
             display: 'block', 
             marginBottom: '5px', 
@@ -226,7 +211,7 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
         </div>
 
         {/* End Date */}
-        <div>
+        <div style={{ flex: '0 0 150px' }}>
           <label style={{ 
             display: 'block', 
             marginBottom: '5px', 
@@ -251,69 +236,6 @@ export default function PromotionsFilters({ onFiltersChange, isLoading = false }
             }}
             disabled={isLoading}
           />
-        </div>
-
-        {/* Sort By */}
-        <div>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px', 
-            color: '#fff', 
-            fontSize: '12px',
-            fontWeight: '500'
-          }}>
-            Sort By
-          </label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px',
-              borderRadius: '4px',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              color: '#fff',
-              fontSize: '14px',
-            }}
-            disabled={isLoading}
-          >
-            {sortableFields.map(field => (
-              <option key={field.value} value={field.value}>
-                {field.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Sort Order */}
-        <div>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px', 
-            color: '#fff', 
-            fontSize: '12px',
-            fontWeight: '500'
-          }}>
-            Sort Order
-          </label>
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-            style={{
-              width: '100%',
-              padding: '10px',
-              borderRadius: '4px',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              color: '#fff',
-              fontSize: '14px',
-            }}
-            disabled={isLoading}
-          >
-            <option value="desc">Descending</option>
-            <option value="asc">Ascending</option>
-          </select>
         </div>
       </div>
 

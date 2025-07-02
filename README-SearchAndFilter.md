@@ -7,9 +7,9 @@ This document describes the enhanced search, filtering, and sorting capabilities
 ### 1. Search Functionality
 - **Combined Search**: Search across promotion names AND user group names in a single field
 - **Real-time Search**: Results update as you type
-- **Debounced Search**: 300ms delay to prevent excessive API calls while typing
+- **Debounced Search**: 1000ms delay to prevent excessive API calls while typing
 - **Case-insensitive**: Search is not case-sensitive
-- **Single Query Parameter**: Uses the `search` query parameter for both promotion names and user groups
+- **Single Query Parameter**: Uses the `search` query parameter for promotion names and user groups
 - **Visual Feedback**: Shows "Typing..." indicator while user is typing
 
 ### 2. Filtering Options
@@ -17,15 +17,18 @@ This document describes the enhanced search, filtering, and sorting capabilities
 - **Date Range Filter**: Filter by start date and end date ranges
 - **Combined Filters**: Use multiple filters simultaneously
 
-### 3. Sorting Capabilities
+### 3. Clickable Header Sorting
+- **Interactive Headers**: All table headers are clickable for sorting
+- **Visual Indicators**: Sort direction arrows (↑↓) show current sort state
+- **Toggle Sorting**: Click once for ascending, click again for descending
 - **Sortable Fields**:
   - Promotion Name
   - Type
   - Start Date
   - End Date
   - User Group Name
-- **Sort Order**: Ascending or Descending
-- **Real-time Sorting**: Results update immediately when sort options change
+- **Hover Effects**: Headers highlight on hover to indicate they're clickable
+- **URL Persistence**: Sort state is saved in URL parameters
 
 ### 4. URL State Management
 - **Persistent State**: All filters, search, and sorting are saved in the URL
@@ -47,8 +50,8 @@ The application now supports the following URL query parameters:
 - `type` - Filter by promotion type
 - `startDate` - Filter by start date (YYYY-MM-DD format)
 - `endDate` - Filter by end date (YYYY-MM-DD format)
-- `sortBy` - Field to sort by
-- `sortOrder` - Sort direction (asc/desc)
+- `sortBy` - Field to sort by (set by clicking table headers)
+- `sortOrder` - Sort direction (asc/desc, toggled by clicking headers)
 
 ## API Endpoint Support
 
@@ -79,25 +82,35 @@ limit?: number           // Items per page
    - Matches existing design theme
    - Real-time filter updates
    - Combined search for promotions and user groups
+   - Type dropdown filter
    - Clear filters functionality
    - URL state synchronization
-   - **Debounced search with 300ms delay**
+   - **Debounced search with 1000ms delay**
    - Visual feedback during typing
+   - **No sorting controls (moved to table headers)**
 
-2. **Enhanced API Client** (`src/api/promotion.ts`)
+2. **Enhanced VirtualizedTable Component** (`src/components/table/VirtualizedTable.tsx`)
+   - **Clickable headers with sorting functionality**
+   - **Visual sort indicators (↑↓)**
+   - **Hover effects for sortable headers**
+   - **Toggle sorting (asc/desc)**
+   - **Sort state management**
+
+3. **Enhanced API Client** (`src/api/promotion.ts`)
    - Updated to support all filter parameters
    - Proper TypeScript typing
    - Query parameter handling
 
-3. **Updated Query Options** (`src/utils/createPromotionsInfiniteQueryOptions.ts`)
+4. **Updated Query Options** (`src/utils/createPromotionsInfiniteQueryOptions.ts`)
    - Support for filter-based query keys
    - Proper caching with filters
    - Infinite scroll with filters
 
-4. **URL State Management** (`src/components/table/PromotionsVirtualizedTable.tsx`)
+5. **URL State Management** (`src/components/table/PromotionsVirtualizedTable.tsx`)
    - React Router integration with `useSearchParams`
    - URL synchronization with filter state
    - Browser navigation support
+   - **Sort state management through headers**
 
 ### Usage Example
 
@@ -117,21 +130,21 @@ function App() {
 ```
 
 The `PromotionsVirtualizedTable` component now automatically includes:
-- Combined search input (promotion names + user groups) with debouncing
+- Combined search input (promotion names and user groups) with debouncing
 - Type dropdown filter
 - Date range filters
-- Sort options
+- **Clickable table headers with sorting**
 - Clear filters button
 - URL state persistence
 
 ## Filter Behavior
 
 ### Debounced Search
-- **Single Search Field**: One input field searches both promotion names and user group names
-- **Debounced Input**: 300ms delay before sending search request to prevent excessive API calls
+- **Single Search Field**: One input field searches promotion names and user group names
+- **Debounced Input**: 1000ms delay before sending search request to prevent excessive API calls
 - **Visual Feedback**: Shows "Typing... (search will update in a moment)" while user is typing
 - **Query Parameter**: Sends a single `search` parameter to the backend
-- **Backend Logic**: Your backend should search across both `promotionName` and `userGroupName` fields
+- **Backend Logic**: Your backend should search across `promotionName` and `userGroupName` fields
 - **Real-time Updates**: Results update after the debounce delay
 - **Empty Search**: Shows all promotions when search is empty
 - **URL Persistence**: Search term is saved in URL
@@ -151,13 +164,16 @@ The `PromotionsVirtualizedTable` component now automatically includes:
 - URL persistence
 - Immediate updates (no debouncing needed)
 
-### Sorting
-- Default sort: Promotion Name (descending)
-- Click sort field dropdown to change sort field
-- Click sort order dropdown to change direction
-- Immediate results update
-- URL persistence
-- Immediate updates (no debouncing needed)
+### Clickable Header Sorting
+- **Interactive Headers**: All table headers are clickable
+- **Visual Indicators**: 
+  - `↕️` - Neutral state (not currently sorted)
+  - `↑` - Ascending sort
+  - `↓` - Descending sort
+- **Toggle Behavior**: Click to sort ascending, click again to sort descending
+- **Hover Effects**: Headers highlight on hover to indicate clickability
+- **URL Persistence**: Sort state is saved in URL
+- **Immediate Updates**: Results update immediately when sorting changes
 
 ### Combined Filters
 - All filters work together
@@ -175,11 +191,17 @@ The `PromotionsVirtualizedTable` component now automatically includes:
 ## Performance Optimizations
 
 ### Debounced Search
-- **300ms Delay**: Prevents API calls on every keystroke
+- **1000ms Delay**: Prevents API calls on every keystroke
 - **Reduced Server Load**: Significantly fewer API requests during typing
 - **Better UX**: Users can type without interruption
 - **Visual Feedback**: Clear indication when search is pending
 - **Memory Efficient**: Proper cleanup of timeouts
+
+### Header Sorting
+- **Immediate Response**: No debouncing needed for sorting
+- **Efficient Updates**: Only sort parameters change, not search/filter
+- **Visual Feedback**: Clear indicators show current sort state
+- **URL Integration**: Sort state persists across page refreshes
 
 ### Other Optimizations
 - **Query Caching**: React Query caches results based on filter combinations
@@ -189,13 +211,13 @@ The `PromotionsVirtualizedTable` component now automatically includes:
 
 ## Backend Implementation Notes
 
-Your backend should handle the `search` parameter to search across both promotion names and user groups. Here's a suggested approach:
+Your backend should handle the `search` parameter to search across promotion names and user groups. Here's a suggested approach:
 
 ```typescript
 // In your backend service
 const filters = {
   type: req.query.type as string,
-  search: req.query.search as string, // This should search both promotionName and userGroupName
+  search: req.query.search as string, // This should search promotionName and userGroupName
   startDate: req.query.startDate ? new Date(req.query.startDate as string) : undefined,
   endDate: req.query.endDate ? new Date(req.query.endDate as string) : undefined,
 }
@@ -226,7 +248,8 @@ The search and filter functionality works seamlessly with the existing WebSocket
 
 ## Performance Considerations
 
-- **Debounced Search**: 300ms delay prevents excessive API calls during typing
+- **Debounced Search**: 1000ms delay prevents excessive API calls during typing
+- **Header Sorting**: Immediate response for better user experience
 - **Query Keys**: Include filter parameters for proper caching
 - **Infinite Scroll**: Works with all filter combinations
 - **WebSocket Updates**: Maintain filter state
@@ -242,6 +265,7 @@ The filter component uses the same design language as the existing application:
 - Hover effects and transitions
 - Disabled states during loading
 - Subtle visual feedback for debounced search
+- **Interactive header styling with hover effects**
 
 ## TypeScript Support
 
@@ -252,6 +276,7 @@ Full TypeScript support with:
 - Compile-time error checking
 - React Router type safety
 - Custom debounce hook with proper typing
+- **Sortable header interfaces**
 
 ## Dependencies Added
 
