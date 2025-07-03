@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useVirtualizer } from "@tanstack/react-virtual"
-import { ArrowUpIcon, ArrowDownIcon, ArrowUpDownIcon } from "../Icons";
+import { ArrowUpIcon, ArrowDownIcon, ArrowUpDownIcon, NoDataIcon } from "../Icons";
 
 // CSS for spinning animation
 const spinAnimation = `
@@ -190,10 +190,9 @@ export default function VirtualizedTable<TData, TResponse>({
               maxWidth: '400px'
             }}>
               <div style={{
-                fontSize: '48px',
                 opacity: 0.5
               }}>
-                📭
+                <NoDataIcon width="64" height="64" fill="currentColor" />
               </div>
               <div style={{
                 fontSize: '20px',
