@@ -1,15 +1,36 @@
 import { useEffect, useMemo, useRef } from "react"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useVirtualizer } from "@tanstack/react-virtual"
+import { ArrowUpIcon, ArrowDownIcon, ArrowUpDownIcon, NoDataIcon } from "../Icons";
+
+// CSS for spinning animation
+const spinAnimation = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
+interface SortableHeader {
+  key: string;
+  label: string;
+  sortable?: boolean;
+}
 
 interface VirtualizedTableProps<TData, TResponse> {
   queryOptions: any
   dataExtractor: (response: TResponse) => TData[]
   renderItem: (item: TData, index: number) => React.ReactNode
-  headers: string[]
+  headers: SortableHeader[]
   itemHeight?: number
   containerHeight?: string
   containerMaxWidth?: string
+  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void
+  currentSort?: {
+    sortBy: string;
+    sortOrder: 'asc' | 'desc';
+  }
+  onLoadingChange?: (isLoading: boolean) => void
 }
 
 export default function VirtualizedTable<TData, TResponse>({
@@ -19,13 +40,23 @@ export default function VirtualizedTable<TData, TResponse>({
   headers,
   itemHeight = 45,
   containerHeight = '50vh',
-  containerMaxWidth = '100%'
+  containerMaxWidth = '100%',
+  onSortChange,
+  currentSort,
+  onLoadingChange
 }: VirtualizedTableProps<TData, TResponse>) {
-  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading, isFetching } =
     useInfiniteQuery(queryOptions)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const items = useMemo(() => data?.pages.flatMap((page: unknown) => dataExtractor(page as TResponse)) ?? [], [data, dataExtractor])
+
+  // Notify parent component of loading state changes
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(isLoading || isFetching);
+    }
+  }, [isLoading, isFetching, onLoadingChange]);
 
   const virtualizer = useVirtualizer({
     count: items?.length ?? 0,
@@ -47,15 +78,33 @@ export default function VirtualizedTable<TData, TResponse>({
     fetchNextPage()
   }, [virtualItems, hasNextPage, isFetchingNextPage, items, fetchNextPage])
 
+  const handleHeaderClick = (header: SortableHeader) => {
+    if (!header.sortable || !onSortChange) return;
+    
+    const newSortOrder = currentSort?.sortBy === header.key && currentSort?.sortOrder === 'asc' ? 'desc' : 'asc';
+    onSortChange(header.key, newSortOrder);
+  };
+
+  const getSortIndicator = (headerKey: string) => {
+    if (!currentSort || currentSort.sortBy !== headerKey) {
+      return <ArrowUpDownIcon width="10" height="10" fill="white" />;
+    }
+    return currentSort.sortOrder !== 'asc' ? 
+      <ArrowUpIcon width="10" height="10" fill="white" /> : 
+      <ArrowDownIcon width="10" height="10" fill="white" />;
+  };
+
   return (
-    <div
-      style={{
-        margin: '2rem auto',
-        maxWidth: containerMaxWidth,
-        width: '100%',
-        // paddingRight: '5px'
-      }}
-    >
+    <>
+      <style>{spinAnimation}</style>
+      <div
+        style={{
+          margin: '2rem auto',
+          maxWidth: containerMaxWidth,
+          width: '100%',
+        }}
+      >
+
       
       <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
         <colgroup>
@@ -66,7 +115,49 @@ export default function VirtualizedTable<TData, TResponse>({
         <thead>
           <tr>
             {headers.map((header, index) => (
-              <th key={index}>{header}</th>
+              <th 
+                key={index}
+                onClick={() => handleHeaderClick(header)}
+                style={{
+                  padding: '20px 15px',
+                  textAlign: 'left',
+                  fontWeight: '500',
+                  fontSize: '12px',
+                  color: '#fff',
+                  textTransform: 'uppercase',
+                  cursor: header.sortable ? 'pointer' : 'default',
+                  userSelect: 'none',
+                  transition: 'background-color 0.2s ease',
+                  position: 'relative',
+                }}
+                onMouseOver={(e) => {
+                  if (header.sortable) {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  }
+                }}
+                onMouseOut={(e) => {
+                  if (header.sortable) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }
+                }}
+              >
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <span>{header.label}</span>
+                  {header.sortable && (
+                    <span style={{
+                      fontSize: '14px',
+                      opacity: currentSort?.sortBy === header.key ? 1 : 0.5,
+                      transition: 'opacity 0.2s ease'
+                    }}>
+                      {getSortIndicator(header.key)}
+                    </span>
+                  )}
+                </div>
+              </th>
             ))}
           </tr>
         </thead>
@@ -80,32 +171,113 @@ export default function VirtualizedTable<TData, TResponse>({
           position: 'relative'
         }}
       >
-        <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', position: 'absolute', top: 0, left: 0 }}>
-          <tbody style={{ position: 'relative', display: 'block', height: virtualizer.getTotalSize() }}>
-            {virtualItems.map((vItem) => {
-              const item = items?.[vItem.index]
-              if (!item) return null
-              return (
-                <tr
-                  key={vItem.key}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    transform: `translateY(${vItem.start}px)`,
-                    height: `${vItem.size}px`,
-                    display: 'table',
-                    tableLayout: 'fixed',
-                  }}
-                  data-index={vItem.index}
-                >
-                  {renderItem(item, vItem.index)}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        {!isLoading && items.length === 0 && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            color: '#fff',
+            fontSize: '16px',
+            textAlign: 'center',
+            padding: '40px'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px',
+              maxWidth: '400px'
+            }}>
+              <div style={{
+                opacity: 0.5
+              }}>
+                <NoDataIcon width="64" height="64" fill="currentColor" />
+              </div>
+              <div style={{
+                fontSize: '20px',
+                fontWeight: '500',
+                marginBottom: '8px'
+              }}>
+                No promotions found
+              </div>
+              <div style={{
+                fontSize: '14px',
+                opacity: 0.7,
+                lineHeight: '1.5'
+              }}>
+                Try adjusting your search criteria or filters to find what you're looking for.
+              </div>
+            </div>
+          </div>
+        )}
+        {isLoading && (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: 'rgba(0, 0, 0, 0.1)',
+            zIndex: 10,
+            borderRadius: '8px'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              color: '#fff',
+              fontSize: '16px',
+              fontWeight: '500',
+              padding: '20px 30px',
+              background: 'rgba(0, 0, 0, 0.7)',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+            }}>
+              <div style={{
+                width: '20px',
+                height: '20px',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                borderTop: '2px solid #fff',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }} />
+              Loading promotions...
+            </div>
+          </div>
+        )}
+        {items.length > 0 && (
+          <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', position: 'absolute', top: 0, left: 0 }}>
+            <tbody style={{ position: 'relative', display: 'block', height: virtualizer.getTotalSize() }}>
+              {virtualItems.map((vItem) => {
+                const item = items?.[vItem.index]
+                if (!item) return null
+                return (
+                  <tr
+                    key={vItem.key}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      transform: `translateY(${vItem.start}px)`,
+                      height: `${vItem.size}px`,
+                      display: 'table',
+                      tableLayout: 'fixed',
+                    }}
+                    data-index={vItem.index}
+                  >
+                    {renderItem(item, vItem.index)}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        )}
         {isFetchingNextPage && (
           <div style={{
             display: 'flex',
@@ -117,6 +289,7 @@ export default function VirtualizedTable<TData, TResponse>({
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   )
 }
