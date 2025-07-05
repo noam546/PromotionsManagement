@@ -12,7 +12,7 @@ import {
   StyledDatePicker,
   ApplyButton,
   ClearButton
-} from './PromotionsFilters.styled';
+} from './promotionsFilters.styled';
 
 interface PromotionsFiltersProps {
   search: string;

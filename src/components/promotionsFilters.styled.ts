@@ -20,15 +20,15 @@ export const SearchInput = styled(TextField)`
     color: #fff;
     
     .MuiOutlinedInput-notchedOutline {
-      border-color: rgb(154, 154, 154);
+      border-color: rgb(154, 154, 154) ;
     }
     
     &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: rgb(154, 154, 154);
+      border-color: rgb(154, 154, 154) ;
     }
-    
+
     &.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border-color: rgb(154, 154, 154);
+      border-color: rgb(154, 154, 154) ;
     }
   }
   
