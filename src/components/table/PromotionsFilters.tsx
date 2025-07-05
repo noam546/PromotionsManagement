@@ -2,11 +2,9 @@ import styles from './PromotionsFilters.module.scss';
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-
-import { TextField, Select, MenuItem, Button, FormControl, InputLabel } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import { TextField, Select, MenuItem, Button, FormControl } from "@mui/material";
 import dayjs from "dayjs";
-import { SearchIcon } from "../icons";
 
 interface PromotionsFiltersProps {
   search: string;
@@ -37,9 +35,9 @@ export default function PromotionsFilters({
 }: PromotionsFiltersProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className={styles.container}>
+      <div className={styles.container} style={{ paddingRight: '24px' }}>
         {/* Search Input */}
-        <div >
+        <div>
           <TextField
             type="text"
             placeholder="Search text"
@@ -48,19 +46,43 @@ export default function PromotionsFilters({
             fullWidth
             variant="outlined"
             InputProps={{
-              style: {
-                borderRadius: '28px',
+              endAdornment: (
+                <div className={styles.searchIconContainer}>
+                  <SearchIcon />
+                </div>
+              ),
+              sx: {
                 height: '40px',
+                borderRadius: '28px',
                 backgroundColor: 'transparent',
-                color: 'rgb(255, 255, 255)',
-                border: '1px solid rgb(154, 154, 154)',
-              }
+                color: '#fff',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'rgb(154, 154, 154)',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'rgb(154, 154, 154)',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'rgb(154, 154, 154)',
+                },
+                '& input::placeholder': {
+                  color: '#fff',
+                  opacity: 1,
+                },
+              },
+            }}
+            sx={{
+              '& .MuiInputBase-input': {
+                padding: '0 14px',
+                lineHeight: '40px',
+                color: '#fff',
+              },
             }}
           />
         </div>
 
         {/* Type Filter */}
-        <div >
+        <div>
           <FormControl fullWidth>
             <Select
               value={type}
@@ -72,6 +94,7 @@ export default function PromotionsFilters({
                 borderRadius: '28px',
                 color: '#fff',
                 height: '40px',
+                minWidth: '150px',
                 border: '1px solid rgb(154, 154, 154) !important',
                 '& .MuiOutlinedInput-notchedOutline': {
                   border: '1px solid rgb(154, 154, 154)',
@@ -87,9 +110,9 @@ export default function PromotionsFilters({
                 },
               }}
             >
-              <MenuItem value="" >All Types</MenuItem>
+              <MenuItem value="">All Types</MenuItem>
               {promotionTypes.map(type => (
-                <MenuItem key={type.value} value={type.value} >
+                <MenuItem key={type.value} value={type.value}>
                   {type.label}
                 </MenuItem>
               ))}
@@ -99,120 +122,120 @@ export default function PromotionsFilters({
 
         {/* Start Date */}
         <div className={styles.datePicker}>
-        <DatePicker
-  label="Start Date"
-  value={startDate ? dayjs(startDate) : null}
-  onChange={(newValue) => {
-    setStartDate(newValue ? newValue.format('YYYY-MM-DD') : '');
-  }}
-  enableAccessibleFieldDOMStructure={false} 
-  slotProps={{
-    textField: {
-      fullWidth: true,
-      variant: "outlined",
-      sx: {
-        '& .MuiOutlinedInput-root': {
-          height: '40px',
-          backgroundColor: 'transparent',
-          color: '#fff',
-          borderRadius: '28px',
-          paddingRight: '8px',
-          alignItems: 'center',
-          '& fieldset': {
-            borderColor: '#fff',
-          },
-          '&:hover fieldset': {
-            borderColor: '#fff',
-          },
-          '&.Mui-focused fieldset': {
-            borderColor: '#fff',
-          },
-        },
-        '& .MuiInputBase-input': {
-          padding: 0,
-          paddingLeft: '14px',
-          fontSize: '14px',
-          color: '#fff',
-          display: 'flex',
-          alignItems: 'center',
-          height: '40px',
-          lineHeight: '40px',
-          boxSizing: 'border-box',
-        },
-        '& .MuiInputLabel-root': {
-          top: '-6px',
-          color: '#fff',
-          fontSize: '14px',
-        },
-        '& .MuiSvgIcon-root': {
-          color: '#fff',
-        },
-        '& .MuiInputAdornment-root': {
-          paddingRight: '8px', 
-        },
-      }
-    }
-  }}
-/>
+          <DatePicker
+            label="Start Date"
+            value={startDate ? dayjs(startDate) : null}
+            onChange={(newValue) => {
+              setStartDate(newValue ? newValue.format('YYYY-MM-DD') : '');
+            }}
+            enableAccessibleFieldDOMStructure={false} 
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                variant: "outlined",
+                sx: {
+                  '& .MuiOutlinedInput-root': {
+                    height: '40px',
+                    backgroundColor: 'transparent',
+                    color: '#fff',
+                    borderRadius: '28px',
+                    paddingRight: '8px',
+                    alignItems: 'center',
+                    '& fieldset': {
+                      borderColor: '#fff',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#fff',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fff',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    padding: 0,
+                    paddingLeft: '14px',
+                    fontSize: '14px',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '40px',
+                    lineHeight: '40px',
+                    boxSizing: 'border-box',
+                  },
+                  '& .MuiInputLabel-root': {
+                    top: '-6px',
+                    color: '#fff',
+                    fontSize: '14px',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: '#fff',
+                  },
+                  '& .MuiInputAdornment-root': {
+                    paddingRight: '8px', 
+                  },
+                }
+              }
+            }}
+          />
         </div>
 
         {/* End Date */}
         <div className={styles.datePicker}>
-        <DatePicker
-  label="End Date"
-  value={endDate ? dayjs(endDate) : null}
-  onChange={(newValue) => {
-    setEndDate(newValue ? newValue.format('YYYY-MM-DD') : '');
-  }}
-  enableAccessibleFieldDOMStructure={false}
-  slotProps={{
-    textField: {
-      fullWidth: true,
-      variant: "outlined",
-      sx: {
-        '& .MuiOutlinedInput-root': {
-          height: '40px',
-          backgroundColor: 'transparent',
-          color: '#fff',
-          borderRadius: '28px',
-          paddingRight: '8px',
-          alignItems: 'center',
-          '& fieldset': {
-            borderColor: '#fff',
-          },
-          '&:hover fieldset': {
-            borderColor: '#fff',
-          },
-          '&.Mui-focused fieldset': {
-            borderColor: '#fff',
-          },
-        },
-        '& .MuiInputBase-input': {
-          padding: 0,
-          paddingLeft: '14px',
-          fontSize: '14px',
-          color: '#fff',
-          display: 'flex',
-          alignItems: 'center',
-          height: '40px',
-          lineHeight: '40px',
-          boxSizing: 'border-box',
-        },
-        '& .MuiInputLabel-root': {
-          top: '-6px',
-          color: '#fff',
-          fontSize: '14px',
-        },
-        '& .MuiSvgIcon-root': {
-          color: '#fff',
-        },
-        '& .MuiInputAdornment-root': {
-          paddingRight: '8px', 
-        },
-      }
-    }
-  }}
-/>
+          <DatePicker
+            label="End Date"
+            value={endDate ? dayjs(endDate) : null}
+            onChange={(newValue) => {
+              setEndDate(newValue ? newValue.format('YYYY-MM-DD') : '');
+            }}
+            enableAccessibleFieldDOMStructure={false}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                variant: "outlined",
+                sx: {
+                  '& .MuiOutlinedInput-root': {
+                    height: '40px',
+                    backgroundColor: 'transparent',
+                    color: '#fff',
+                    borderRadius: '28px',
+                    paddingRight: '8px',
+                    alignItems: 'center',
+                    '& fieldset': {
+                      borderColor: '#fff',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#fff',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#fff',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    padding: 0,
+                    paddingLeft: '14px',
+                    fontSize: '14px',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '40px',
+                    lineHeight: '40px',
+                    boxSizing: 'border-box',
+                  },
+                  '& .MuiInputLabel-root': {
+                    top: '-6px',
+                    color: '#fff',
+                    fontSize: '14px',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    color: '#fff',
+                  },
+                  '& .MuiInputAdornment-root': {
+                    paddingRight: '8px', 
+                  },
+                }
+              }
+            }}
+          />
         </div>
 
         <Button
