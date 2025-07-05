@@ -62,31 +62,44 @@ export default function PromotionsFilters({
 
           {/* Start Date */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-  <div className={styles.startDate}>
-    <DatePicker
-      label="Start Date"
-      value={startDate ? dayjs(startDate) : null}
-      onChange={(newValue) => {
-        setStartDate(newValue ? newValue.format('YYYY-MM-DD') : '');
-      }}
-      enableAccessibleFieldDOMStructure={false}
-      slots={{ textField: TextField }}
-      slotProps={{
-        textField: {
-          className: styles.input,
-          fullWidth: true,
-          variant: "outlined",
-          InputProps: {
-            style: { height: "40px" },
-          },
-          inputProps: {
-            style: { padding: "8px 12px" },
-          },
-        },
-      }}
-    />
-  </div>
-</LocalizationProvider>
+            <div className={styles.startDate}>
+              <DatePicker
+                label="Start Date"
+                value={startDate ? dayjs(startDate) : null}
+                onChange={(newValue) => {
+                  setStartDate(newValue ? newValue.format('YYYY-MM-DD') : '');
+                }}
+                slots={{ textField: TextField }}
+                slotProps={{
+                  textField: {
+                    className: styles.input,
+                    fullWidth: true,
+                    variant: "outlined",
+                    placeholder: "Start Date",
+                    sx: {
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '20px',
+                        backgroundColor: 'transparent',
+                        color: 'inherit',
+                        height: '40px',
+                        padding: '0',
+                      },
+                      '& .MuiOutlinedInput-input': {
+                        padding: '8px 12px',
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: 'inherit',
+                      },
+                    },
+                    InputProps: {
+                      style: { height: '40px', padding: '8px 12px', border: '1px solid rgb(154, 154, 154)' },
+                    }
+                  },
+                }}
+                enableAccessibleFieldDOMStructure={false}
+              />
+            </div>
+          </LocalizationProvider>
 
           {/* End Date */}
           <div className={styles.endDate}>
