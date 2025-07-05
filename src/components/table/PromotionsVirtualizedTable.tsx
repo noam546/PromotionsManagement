@@ -3,9 +3,11 @@ import { useState, useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useWebSocketTableUpdates } from '../../hooks';
 import { GetPromotionsResponse, Promotion, GetPromotionsOptions } from '../../api';
-import VirtualizedTable from './VirtualizedTable';
+import VirtualizedTable, { SortableHeader } from './VirtualizedTable';
 import PromotionsFilters from './PromotionsFilters';
 import { createPromotionsInfiniteQueryOptions } from '../../utils';
+import { NoDataIcon } from '../Icons';
+import styles from './Table.module.scss';
 
 const queryClient = new QueryClient()
 
@@ -77,13 +79,29 @@ function PromotionsTableWithWebSocket() {
   }, [searchParams]);
 
 
-  const headers = [
-    { key: 'promotionName', label: 'Promotion Name', sortable: true },
-    { key: 'type', label: 'Type', sortable: true },
-    { key: 'startDate', label: 'Start Date', sortable: true },
-    { key: 'endDate', label: 'End Date', sortable: true },
-    { key: 'userGroupName', label: 'User Group Name', sortable: true },
+  const headers : SortableHeader[] = [
+    { key: 'promotionName', label: 'Promotion Name', sortable: true, onSortChange: handleSortChange },
+    { key: 'type', label: 'Type', sortable: true, onSortChange: handleSortChange },
+    { key: 'startDate', label: 'Start Date', sortable: true, onSortChange: handleSortChange },
+    { key: 'endDate', label: 'End Date', sortable: true, onSortChange: handleSortChange },
+    { key: 'userGroupName', label: 'User Group Name', sortable: true, onSortChange: handleSortChange },
   ];
+
+  const NoDataView = () => {
+    return (
+      <>
+        <div className={styles.noDataIcon}>
+          <NoDataIcon width="64" height="64" fill="currentColor" />
+        </div>
+        <div className={styles.noDataTitle}>
+          No promotions found
+        </div>
+        <div className={styles.noDataMessage}>
+          Try adjusting your search criteria or filters to find what you're looking for.
+        </div>
+      </>
+    );
+  };
 
   return (
     <>
@@ -95,12 +113,12 @@ function PromotionsTableWithWebSocket() {
           dataExtractor={(response) => response.promotions}
           containerMaxWidth='calc(100% - 10px)'
           headers={headers}
-          onSortChange={handleSortChange}
           currentSort={{
             sortBy: filters.sortBy || 'createdAt',
             sortOrder: filters.sortOrder || 'desc',
           }}
           onLoadingChange={handleLoadingChange}
+          noDataView={NoDataView}
           renderItem={(promotion, _) => (
             <>
               <td>{promotion.promotionName}</td>

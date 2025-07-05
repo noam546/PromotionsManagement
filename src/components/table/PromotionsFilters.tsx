@@ -58,18 +58,8 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
   }, [searchParams]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h3 className={styles.title}>
-          Search & Filters
-        </h3>
-      </div>
-        
-        <div className={styles.filtersRow}>
+        <div className={styles.container}>
           <div className={styles.searchInput}>
-            <label className={styles.label}>
-              Search Promotions & User Groups
-            </label>
             <input
               type="text"
               placeholder="Search by promotion name or user group..."
@@ -81,9 +71,6 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
 
           {/* Type Filter */}
           <div className={styles.typeFilter}>
-            <label className={styles.label}>
-              Type
-            </label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
@@ -100,9 +87,6 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
 
           {/* Start Date */}
           <div className={styles.startDate}>
-            <label className={styles.label}>
-              Start Date
-            </label>
             <input
               type="date"
               value={startDate}
@@ -113,9 +97,6 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
 
           {/* End Date */}
           <div className={styles.endDate}>
-            <label className={styles.label}>
-              End Date
-            </label>
             <input
               type="date"
               value={endDate}
@@ -123,22 +104,22 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
               className={styles.input}
             />
           </div>
-        </div>
 
         {/* Action Buttons */}
         <div className={styles.actions}>
+        <button
+            onClick={applyFilters}
+            className={styles.primaryButton}
+          >
+            Apply
+          </button>
           <button
             onClick={clearFilters}
             className={styles.button}
           >
-            Clear Filters
+            Clear
           </button>
-          <button
-            onClick={applyFilters}
-            className={styles.primaryButton}
-          >
-            Apply Filters
-          </button>
+          
         </div>
       </div>
   );
