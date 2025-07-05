@@ -1,3 +1,3 @@
+export { default as VirtualizedTable } from './VirtualizedTable';
+export { default as PromotionsFilters } from './PromotionsFilters';
 export * from './VirtualizedTable';
-export * from './PromotionsPage';
-export * from './PromotionsFilters';

@@ -19,6 +19,22 @@
   color: #fff;
 }
 
+.searchInputWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  z-index: 1;
+  color: #fff;
+  opacity: 0.7;
+}
+
 .typeContainer {
   flex: 1;
   min-width: 100px;
@@ -70,6 +86,10 @@
     color: #ffffff;
   }
   
+}
+
+.searchInputWrapper .input {
+  padding-left: 40px;
 }
 
 input[type="date"].input::-webkit-calendar-picker-indicator {

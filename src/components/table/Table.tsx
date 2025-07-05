@@ -1,4 +1,4 @@
-import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon, NoDataIcon } from "../Icons";
+import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon, NoDataIcon } from "../icons";
 import styles from './Table.module.scss';
 
 interface TableProps {

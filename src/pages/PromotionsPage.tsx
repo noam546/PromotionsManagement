@@ -1,12 +1,10 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useWebSocketTableUpdates } from '../../hooks';
-import { GetPromotionsResponse, Promotion, GetPromotionsOptions } from '../../api';
-import VirtualizedTable, { SortableHeader } from './VirtualizedTable';
-import PromotionsFilters from './PromotionsFilters';
-import { createPromotionsInfiniteQueryOptions } from '../../utils';
-import { NoDataIcon } from '../Icons';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useWebSocketTableUpdates } from '../hooks';
+import { GetPromotionsResponse, Promotion, GetPromotionsOptions } from '../api';
+import { VirtualizedTable, PromotionsFilters, SortableHeader, NoDataIcon } from '../components';
+import { createPromotionsInfiniteQueryOptions } from '../utils';
 import styles from './PromotionsPage.module.scss';
 
 const queryClient = new QueryClient()

@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
-import Logo from './components/Logo'
+import Logo from './components/logo'
 import './App.css';
-import PromotionsPage from './components/table/PromotionsPage';
+import { PromotionsPage } from './pages';
 
 const App = () => {
   return (
