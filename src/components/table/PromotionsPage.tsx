@@ -7,7 +7,7 @@ import VirtualizedTable, { SortableHeader } from './VirtualizedTable';
 import PromotionsFilters from './PromotionsFilters';
 import { createPromotionsInfiniteQueryOptions } from '../../utils';
 import { NoDataIcon } from '../Icons';
-import styles from './PromotionsVirtualizedTable.module.scss';
+import styles from './PromotionsPage.module.scss';
 
 const queryClient = new QueryClient()
 
@@ -18,7 +18,7 @@ const promotionTypes = [
   { value: 'basic', label: 'Basic' },
 ];
 
-function PromotionsTableWithWebSocket() {
+function PromotionsPageContent() {
   useWebSocketTableUpdates();
   
   const [searchParams, setSearchParams] = useSearchParams();
@@ -182,10 +182,10 @@ function PromotionsTableWithWebSocket() {
   );
 }
 
-export default function PromotionsVirtualizedTable() {
+export default function PromotionsPage() {
   return (
     <QueryClientProvider client={queryClient}>
-      <PromotionsTableWithWebSocket />
+      <PromotionsPageContent />
     </QueryClientProvider>
   );
 } 

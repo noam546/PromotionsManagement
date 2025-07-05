@@ -1,3 +1,3 @@
 export * from './VirtualizedTable';
-export * from './PromotionsVirtualizedTable';
+export * from './PromotionsPage';
 export * from './PromotionsFilters';
