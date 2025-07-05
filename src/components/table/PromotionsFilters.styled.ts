@@ -131,32 +131,32 @@ export const StyledDatePicker = styled(DatePicker)`
 `;
 
 export const ApplyButton = styled(Button)`
-  padding: 10px 20px;
-  background-color: #007AFF;
-  border-radius: 28px;
-  color: #fff;
-  font-size: 14px;
-  height: 40px;
-  font-weight: 500;
-  text-transform: none;
+  padding: 10px 20px !important;
+  background-color: #007AFF !important;
+  border-radius: 28px !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
   
   &:hover {
-    background-color: #2d93ff;
+    background-color: #2d93ff !important;
   }
 `;
 
 export const ClearButton = styled(Button)`
-  padding: 10px 20px;
-  border: 1px solid rgb(154, 154, 154);
-  background-color: transparent;
-  color: #fff;
-  font-size: 14px;
-  height: 40px;
-  border-radius: 28px;
-  text-transform: none;
+  padding: 10px 20px !important;
+  border: 1px solid rgb(154, 154, 154) !important;
+  background-color: transparent ;
+  color: #fff !important;
+  font-size: 14px ;
+  height: 40px ;
+  border-radius: 28px !important;
+  text-transform: none !important;
   
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgb(154, 154, 154);
+    border: 1px solid rgb(154, 154, 154) ;
   }
 `; 
