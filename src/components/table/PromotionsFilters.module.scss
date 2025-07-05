@@ -20,7 +20,7 @@
   color: #fff;
 }
 
-.typeFilter {
+.typeContainer {
   display: flex;
   flex: 1;
   min-width: 100px;
@@ -56,6 +56,21 @@
     color: #ffffff;
   }
 }
+
+.typeInput {
+    width: 100%;
+    padding: 0 !important;
+    border-radius: 28px !important;
+    border: 1px solid rgb(154, 154, 154) ;
+    background: transparent;
+    color: #fff;
+    margin: 0 !important;
+    font-size: 14px;
+    max-height: 38px;
+    &::placeholder{
+      color: #ffffff !important;
+    }
+  }
 
 .button {
   padding: 10px 20px;

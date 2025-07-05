@@ -3,6 +3,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TextField } from "@mui/material";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import dayjs from "dayjs";
 
 interface PromotionsFiltersProps {
@@ -46,7 +50,7 @@ export default function PromotionsFilters({
           </div>
 
           {/* Type Filter */}
-          <div className={styles.typeFilter}>
+          {/* <div className={styles.typeFilter}>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
@@ -59,7 +63,27 @@ export default function PromotionsFilters({
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
+
+      <FormControl className={styles.typeContainer}>
+        <InputLabel >Type</InputLabel>
+        <Select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          autoWidth
+          className={styles.typeInput}
+          label="Type"
+        >
+          <MenuItem value="">
+            <em>All Types</em>
+          </MenuItem>
+          {promotionTypes.map(type => (
+                <MenuItem key={type.value} value={type.value}>
+                  {type.label}
+                </MenuItem>
+              ))}
+        </Select>
+      </FormControl>
 
           {/* Start Date */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>

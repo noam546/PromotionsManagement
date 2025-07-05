@@ -7,7 +7,7 @@ import VirtualizedTable, { SortableHeader } from './VirtualizedTable';
 import PromotionsFilters from './PromotionsFilters';
 import { createPromotionsInfiniteQueryOptions } from '../../utils';
 import { NoDataIcon } from '../Icons';
-import styles from './Table.module.scss';
+import styles from './PromotionsVirtualizedTable.module.scss';
 
 const queryClient = new QueryClient()
 
@@ -140,7 +140,7 @@ function PromotionsTableWithWebSocket() {
 
   return (
     <>
-      <h1>Promotions</h1>
+      <div className={styles.header}>Promotions</div>
       <PromotionsFilters 
         search={search}
         setSearch={setSearch}
