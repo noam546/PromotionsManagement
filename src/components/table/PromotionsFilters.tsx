@@ -67,7 +67,7 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
           <div className={styles.searchInput}>
             <input
               type="text"
-              placeholder="Search by promotion name or user group..."
+              placeholder="Search text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className={styles.input}
