@@ -126,7 +126,6 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     }
 
     return () => {
-      // Clean up event listeners on unmount
       callbacksRef.current.forEach((callbacks, eventType) => {
         callbacks.forEach(callback => {
           webSocketService.off(eventType, callback);
