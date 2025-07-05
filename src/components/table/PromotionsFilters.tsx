@@ -81,7 +81,7 @@ export default function PromotionsFilters({
                         borderRadius: '20px',
                         backgroundColor: 'transparent',
                         color: 'inherit',
-                        height: '40px',
+                        height: '38px',
                         padding: '0',
                         display: 'flex',
                         alignItems: 'center',
@@ -95,6 +95,7 @@ export default function PromotionsFilters({
                         color: 'inherit',
                         top: '50%',
                         transform: 'translateY(-50%)',
+                        left: '12px',
                       },
                       '& .MuiSvgIcon-root': {
                         color: '#fff',
