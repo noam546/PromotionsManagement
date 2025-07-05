@@ -50,7 +50,7 @@ export default function PromotionsFilters({
           </div>
 
           {/* Type Filter */}
-          {/* <div className={styles.typeFilter}>
+          <div className={styles.typeContainer}>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
@@ -63,27 +63,7 @@ export default function PromotionsFilters({
                 </option>
               ))}
             </select>
-          </div> */}
-
-      <FormControl className={styles.typeContainer}>
-        <InputLabel >Type</InputLabel>
-        <Select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          autoWidth
-          className={styles.typeInput}
-          label="Type"
-        >
-          <MenuItem value="">
-            <em>All Types</em>
-          </MenuItem>
-          {promotionTypes.map(type => (
-                <MenuItem key={type.value} value={type.value}>
-                  {type.label}
-                </MenuItem>
-              ))}
-        </Select>
-      </FormControl>
+          </div>
 
           {/* Start Date */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
