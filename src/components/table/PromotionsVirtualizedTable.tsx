@@ -11,11 +11,23 @@ import styles from './Table.module.scss';
 
 const queryClient = new QueryClient()
 
+// Promotion types moved from PromotionsFilters
+const promotionTypes = [
+  { value: 'common', label: 'Common' },
+  { value: 'epic', label: 'Epic' },
+  { value: 'basic', label: 'Basic' },
+];
+
 function PromotionsTableWithWebSocket() {
   useWebSocketTableUpdates();
   
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
+  
+  // Filter state moved from PromotionsFilters
+  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [type, setType] = useState(searchParams.get('type') || '');
+  const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');
+  const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');
   
   const [filters, setFilters] = useState<Omit<GetPromotionsOptions, 'page' | 'limit'>>(() => ({
     search: searchParams.get('search') || undefined,
@@ -40,14 +52,36 @@ function PromotionsTableWithWebSocket() {
     setSearchParams(newSearchParams, { replace: true });
   }, [setSearchParams]);
 
-  const handleFiltersChange = useCallback((newFilters: Omit<GetPromotionsOptions, 'page' | 'limit'>) => {
-    const updatedFilters = {
-      ...newFilters,
+  // Filter handlers moved from PromotionsFilters
+  const applyFilters = useCallback(() => {
+    const newFilters = {
+      search: search || undefined,
+      type: type || undefined,
+      userGroupName: undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
       sortBy: filters.sortBy,
       sortOrder: filters.sortOrder,
     };
-    setFilters(updatedFilters);
-    updateURL(updatedFilters);
+    setFilters(newFilters);
+    updateURL(newFilters);
+  }, [search, type, startDate, endDate, filters.sortBy, filters.sortOrder, updateURL]);
+
+  const clearFilters = useCallback(() => {
+    setSearch('');
+    setType('');
+    setStartDate('');
+    setEndDate('');
+    const newFilters = {
+      search: undefined,
+      type: undefined,
+      startDate: undefined,
+      endDate: undefined,
+      sortBy: filters.sortBy,
+      sortOrder: filters.sortOrder,
+    };
+    setFilters(newFilters);
+    updateURL(newFilters);
   }, [filters.sortBy, filters.sortOrder, updateURL]);
 
   const handleSortChange = useCallback((sortBy: string, sortOrder: 'asc' | 'desc') => {
@@ -59,10 +93,6 @@ function PromotionsTableWithWebSocket() {
     setFilters(updatedFilters);
     updateURL(updatedFilters);
   }, [filters, updateURL]);
-
-  const handleLoadingChange = useCallback((loading: boolean) => {
-    setIsLoading(loading);
-  }, []);
 
   useEffect(() => {
     const urlFilters = {
@@ -76,6 +106,11 @@ function PromotionsTableWithWebSocket() {
     };
     
     setFilters(urlFilters);
+    // Update local filter state from URL
+    setSearch(searchParams.get('search') || '');
+    setType(searchParams.get('type') || '');
+    setStartDate(searchParams.get('startDate') || '');
+    setEndDate(searchParams.get('endDate') || '');
   }, [searchParams]);
 
 
@@ -106,7 +141,19 @@ function PromotionsTableWithWebSocket() {
   return (
     <>
       <h1>Promotions</h1>
-      <PromotionsFilters onFiltersChange={handleFiltersChange} />
+      <PromotionsFilters 
+        search={search}
+        setSearch={setSearch}
+        type={type}
+        setType={setType}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        applyFilters={applyFilters}
+        clearFilters={clearFilters}
+        promotionTypes={promotionTypes}
+      />
       <div>
         <VirtualizedTable<Promotion, GetPromotionsResponse>
           queryOptions={createPromotionsInfiniteQueryOptions(filters)}
@@ -117,7 +164,6 @@ function PromotionsTableWithWebSocket() {
             sortBy: filters.sortBy || 'createdAt',
             sortOrder: filters.sortOrder || 'desc',
           }}
-          onLoadingChange={handleLoadingChange}
           noDataView={NoDataView}
           renderItem={(promotion, _) => (
             <>

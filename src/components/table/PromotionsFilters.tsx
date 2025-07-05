@@ -1,67 +1,37 @@
-import { useState, useCallback, useEffect} from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { GetPromotionsOptions } from '../../api/promotion';
 import styles from './PromotionsFilters.module.scss';
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TextField } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 interface PromotionsFiltersProps {
-  onFiltersChange: (filters: Omit<GetPromotionsOptions, 'page' | 'limit'>) => void;
+  search: string;
+  setSearch: (value: string) => void;
+  type: string;
+  setType: (value: string) => void;
+  startDate: string;
+  setStartDate: (value: string) => void;
+  endDate: string;
+  setEndDate: (value: string) => void;
+  applyFilters: () => void;
+  clearFilters: () => void;
+  promotionTypes: Array<{ value: string; label: string }>;
 }
 
-const promotionTypes = [
-  { value: 'common', label: 'Common' },
-  { value: 'epic', label: 'Epic' },
-  { value: 'basic', label: 'Basic' },
-];
-
-export default function PromotionsFilters({ onFiltersChange }: PromotionsFiltersProps) {
-  const [searchParams] = useSearchParams();
-  
-  // Initialize state from URL params
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [type, setType] = useState(searchParams.get('type') || '');
-  const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');
-  const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');
-
-  const applyFilters = useCallback(() => {
-    const filters = {
-      search: search || undefined,
-      type: type || undefined,
-      userGroupName: undefined,
-      startDate: startDate || undefined,
-      endDate: endDate || undefined,
-      sortBy: undefined,
-      sortOrder: undefined,
-    };
-    onFiltersChange(filters);
-  }, [search, type, startDate, endDate, onFiltersChange]);
-
-  const clearFilters = useCallback(() => {
-    setSearch('');
-    setType('');
-    setStartDate('');
-    setEndDate('');
-    onFiltersChange({
-      search: undefined,
-      type: undefined,
-      startDate: undefined,
-      endDate: undefined,
-      sortBy: undefined,
-      sortOrder: undefined,
-    });
-  }, [onFiltersChange]);
-
-  useEffect(() => {
-    setSearch(searchParams.get('search') || '');
-    setType(searchParams.get('type') || '');
-    setStartDate(searchParams.get('startDate') || '');
-    setEndDate(searchParams.get('endDate') || '');
-  }, [searchParams]);
-
+export default function PromotionsFilters({ 
+  search, 
+  setSearch, 
+  type, 
+  setType, 
+  startDate, 
+  setStartDate, 
+  endDate, 
+  setEndDate, 
+  applyFilters, 
+  clearFilters,
+  promotionTypes 
+}: PromotionsFiltersProps) {
   return (
         <div className={styles.container}>
           <div className={styles.searchInput}>

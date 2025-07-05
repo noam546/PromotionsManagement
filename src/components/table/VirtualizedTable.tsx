@@ -22,7 +22,6 @@ interface VirtualizedTableProps<TData, TResponse> {
     sortBy: string;
     sortOrder: 'asc' | 'desc';
   }
-  onLoadingChange?: (isLoading: boolean) => void
   noDataView?: React.ComponentType
 }
 
@@ -35,20 +34,13 @@ export default function VirtualizedTable<TData, TResponse>({
   containerHeight = '50vh',
   containerMaxWidth = '100%',
   currentSort,
-  onLoadingChange,
   noDataView
 }: VirtualizedTableProps<TData, TResponse>) {
-  const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading, isFetching } =
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading } =
     useInfiniteQuery(queryOptions)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const items = useMemo(() => data?.pages.flatMap((page: unknown) => dataExtractor(page as TResponse)) ?? [], [data, dataExtractor])
-
-  useEffect(() => {
-    if (onLoadingChange) {
-      onLoadingChange(isLoading || isFetching);
-    }
-  }, [isLoading, isFetching, onLoadingChange]);
 
   const virtualizer = useVirtualizer({
     count: items?.length ?? 0,
