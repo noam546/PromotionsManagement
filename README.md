@@ -2,7 +2,7 @@
 
 A modern React-based promotions management application with real-time WebSocket updates, built with TypeScript and Material-UI.
 
-## 🚀 Features
+## Features
 
 - **Real-time Updates**: WebSocket integration for live promotion updates
 - **Virtualized Table**: High-performance table with infinite scrolling for large datasets
@@ -13,7 +13,7 @@ A modern React-based promotions management application with real-time WebSocket 
 - **React Query**: Efficient data fetching and caching
 - **URL State Management**: Filters and sorting state preserved in URL
 
-## 🏗️ Architecture
+## Architecture
 
 ### Frontend Stack
 
@@ -48,7 +48,7 @@ src/
 └── utils/                # Utility functions
 ```
 
-## 🛠️ Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 
@@ -57,18 +57,12 @@ src/
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd PromotionsManagement
-   ```
-
-2. **Install dependencies**
+1. **Install dependencies**
    ```bash
    yarn install
    ```
 
-3. **Start the development server**
+2. **Start the development server**
    ```bash
    yarn start
    ```
@@ -81,7 +75,7 @@ The application will be available at `http://localhost:3000`
 yarn build
 ```
 
-## 📖 Usage
+## Usage
 
 ### Main Features
 
@@ -101,31 +95,7 @@ yarn build
 - Real-time notifications for promotion changes
 - Connection status monitoring
 
-### WebSocket Integration
-
-The application includes comprehensive WebSocket support for real-time updates:
-
-```tsx
-import { useWebSocket } from './hooks/useWebSocket';
-
-function MyComponent() {
-  const { isConnected, onPromotionCreated } = useWebSocket();
-
-  useEffect(() => {
-    onPromotionCreated((data) => {
-      console.log('New promotion:', data.data.promotion);
-    });
-  }, [onPromotionCreated]);
-
-  return (
-    <div>
-      Connection status: {isConnected ? 'Connected' : 'Disconnected'}
-    </div>
-  );
-}
-```
-
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -149,17 +119,8 @@ export class WebSocketService {
 }
 ```
 
-## 🧪 Testing
 
-```bash
-# Run tests
-yarn test
-
-# Run tests in watch mode
-yarn test --watch
-```
-
-## 📦 Dependencies
+## Dependencies
 
 ### Core Dependencies
 - `react`: ^18.2.0
@@ -170,62 +131,9 @@ yarn test --watch
 - `@tanstack/react-virtual`: ^3.13.12
 - `socket.io-client`: ^4.8.1
 
-### Development Dependencies
-- `@faker-js/faker`: ^8.2.0 (for generating test data)
-
 ## 🚀 Performance Features
 
 - **Virtualized Table**: Only renders visible rows for optimal performance
 - **Infinite Scrolling**: Loads data on-demand to handle large datasets
 - **React Query Caching**: Intelligent caching and background updates
 - **Optimized Re-renders**: Minimal component re-renders with proper memoization
-
-## 🔒 Security Considerations
-
-- TypeScript for type safety
-- Input validation with Zod schemas
-- Secure WebSocket connections (in production)
-- Proper error handling and user feedback
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-1. **WebSocket Connection Issues**
-   - Ensure the backend server is running
-   - Check CORS configuration
-   - Verify WebSocket server URL
-
-2. **Build Errors**
-   - Clear node_modules and reinstall: `rm -rf node_modules && yarn install`
-   - Check TypeScript configuration
-   - Verify all dependencies are compatible
-
-3. **Performance Issues**
-   - Check browser console for memory leaks
-   - Verify virtualized table is working correctly
-   - Monitor WebSocket connection status
-
-### Debug Mode
-
-Enable debug logging for WebSocket:
-
-```bash
-DEBUG=socket.io:* yarn start
-```
-
-## 📞 Support
-
-For support and questions, please refer to the project documentation or create an issue in the repository. 
