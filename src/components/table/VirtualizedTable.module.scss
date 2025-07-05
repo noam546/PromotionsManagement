@@ -1,0 +1,164 @@
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.container {
+  margin: 2rem auto;
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.header {
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: #fff;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  position: relative;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &.nonSortable {
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortIndicator {
+  font-size: 14px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+.scrollContainer {
+  overflow-y: auto;
+  width: 100%;
+  position: relative;
+}
+
+.noDataContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  padding: 40px;
+}
+
+.noDataContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 400px;
+}
+
+.noDataIcon {
+  opacity: 0.5;
+}
+
+.noDataTitle {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.noDataMessage {
+  font-size: 14px;
+  opacity: 0.7;
+  line-height: 1.5;
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  border-radius: 8px;
+}
+
+.loadingContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 20px 30px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.virtualTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.virtualTbody {
+  position: relative;
+  display: block;
+}
+
+.virtualRow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+} 

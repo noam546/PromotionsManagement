@@ -2,14 +2,7 @@ import { useEffect, useMemo, useRef } from "react"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { ArrowUpIcon, ArrowDownIcon, ArrowUpDownIcon, NoDataIcon } from "../Icons";
-
-// CSS for spinning animation
-const spinAnimation = `
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
+import styles from './VirtualizedTable.module.scss';
 
 interface SortableHeader {
   key: string;
@@ -95,18 +88,11 @@ export default function VirtualizedTable<TData, TResponse>({
   };
 
   return (
-    <>
-      <style>{spinAnimation}</style>
-      <div
-        style={{
-          margin: '2rem auto',
-          maxWidth: containerMaxWidth,
-          width: '100%',
-        }}
-      >
-
-      
-      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+    <div
+      className={styles.container}
+      style={{ maxWidth: containerMaxWidth }}
+    >
+      <table className={styles.table}>
         <colgroup>
           {headers.map((_, index) => (
             <col key={index} style={{ width: `${100 / headers.length}%` }} />
@@ -118,41 +104,12 @@ export default function VirtualizedTable<TData, TResponse>({
               <th 
                 key={index}
                 onClick={() => handleHeaderClick(header)}
-                style={{
-                  padding: '20px 15px',
-                  textAlign: 'left',
-                  fontWeight: '500',
-                  fontSize: '12px',
-                  color: '#fff',
-                  textTransform: 'uppercase',
-                  cursor: header.sortable ? 'pointer' : 'default',
-                  userSelect: 'none',
-                  transition: 'background-color 0.2s ease',
-                  position: 'relative',
-                }}
-                onMouseOver={(e) => {
-                  if (header.sortable) {
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                  }
-                }}
-                onMouseOut={(e) => {
-                  if (header.sortable) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }
-                }}
+                className={`${styles.header} ${!header.sortable ? styles.nonSortable : ''}`}
               >
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
+                <div className={styles.headerContent}>
                   <span>{header.label}</span>
                   {header.sortable && (
-                    <span style={{
-                      fontSize: '14px',
-                      opacity: currentSort?.sortBy === header.key ? 1 : 0.5,
-                      transition: 'opacity 0.2s ease'
-                    }}>
+                    <span className={`${styles.sortIndicator} ${currentSort?.sortBy === header.key ? styles.active : ''}`}>
                       {getSortIndicator(header.key)}
                     </span>
                   )}
@@ -164,110 +121,45 @@ export default function VirtualizedTable<TData, TResponse>({
       </table>
       <div
         ref={scrollRef}
-        style={{
-          height: containerHeight,
-          overflowY: 'auto',
-          width: '100%',
-          position: 'relative'
-        }}
+        className={styles.scrollContainer}
+        style={{ height: containerHeight }}
       >
         {!isLoading && items.length === 0 && (
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            color: '#fff',
-            fontSize: '16px',
-            textAlign: 'center',
-            padding: '40px'
-          }}>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '16px',
-              maxWidth: '400px'
-            }}>
-              <div style={{
-                opacity: 0.5
-              }}>
+          <div className={styles.noDataContainer}>
+            <div className={styles.noDataContent}>
+              <div className={styles.noDataIcon}>
                 <NoDataIcon width="64" height="64" fill="currentColor" />
               </div>
-              <div style={{
-                fontSize: '20px',
-                fontWeight: '500',
-                marginBottom: '8px'
-              }}>
+              <div className={styles.noDataTitle}>
                 No promotions found
               </div>
-              <div style={{
-                fontSize: '14px',
-                opacity: 0.7,
-                lineHeight: '1.5'
-              }}>
+              <div className={styles.noDataMessage}>
                 Try adjusting your search criteria or filters to find what you're looking for.
               </div>
             </div>
           </div>
         )}
         {isLoading && (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            background: 'rgba(0, 0, 0, 0.1)',
-            zIndex: 10,
-            borderRadius: '8px'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              color: '#fff',
-              fontSize: '16px',
-              fontWeight: '500',
-              padding: '20px 30px',
-              background: 'rgba(0, 0, 0, 0.7)',
-              borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-            }}>
-              <div style={{
-                width: '20px',
-                height: '20px',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                borderTop: '2px solid #fff',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
-              }} />
+          <div className={styles.loadingOverlay}>
+            <div className={styles.loadingContent}>
+              <div className={styles.spinner} />
               Loading promotions...
             </div>
           </div>
         )}
         {items.length > 0 && (
-          <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', position: 'absolute', top: 0, left: 0 }}>
-            <tbody style={{ position: 'relative', display: 'block', height: virtualizer.getTotalSize() }}>
+          <table className={styles.virtualTable}>
+            <tbody className={styles.virtualTbody} style={{ height: virtualizer.getTotalSize() }}>
               {virtualItems.map((vItem) => {
                 const item = items?.[vItem.index]
                 if (!item) return null
                 return (
                   <tr
                     key={vItem.key}
+                    className={styles.virtualRow}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
                       transform: `translateY(${vItem.start}px)`,
                       height: `${vItem.size}px`,
-                      display: 'table',
-                      tableLayout: 'fixed',
                     }}
                     data-index={vItem.index}
                   >
@@ -279,17 +171,11 @@ export default function VirtualizedTable<TData, TResponse>({
           </table>
         )}
         {isFetchingNextPage && (
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 50
-          }}>
+          <div className={styles.loadMoreContainer}>
             Loading More data...
           </div>
         )}
       </div>
-      </div>
-    </>
+    </div>
   )
 }

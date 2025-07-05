@@ -1,14 +1,7 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect} from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { GetPromotionsOptions } from '../../api/promotion';
-
-// CSS for spinning animation
-const spinAnimation = `
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
+import styles from './PromotionsFilters.module.scss';
 
 interface PromotionsFiltersProps {
   onFiltersChange: (filters: Omit<GetPromotionsOptions, 'page' | 'limit'>) => void;
@@ -33,11 +26,11 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
     const filters = {
       search: search || undefined,
       type: type || undefined,
-      userGroupName: undefined, // Removed separate user group filter
+      userGroupName: undefined,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
-      sortBy: undefined, // Will be handled by table headers
-      sortOrder: undefined, // Will be handled by table headers
+      sortBy: undefined,
+      sortOrder: undefined,
     };
     onFiltersChange(filters);
   }, [search, type, startDate, endDate, onFiltersChange]);
@@ -57,7 +50,6 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
     });
   }, [onFiltersChange]);
 
-  // Sync with URL params when they change (e.g., browser back/forward)
   useEffect(() => {
     setSearch(searchParams.get('search') || '');
     setType(searchParams.get('type') || '');
@@ -66,49 +58,16 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
   }, [searchParams]);
 
   return (
-    <>
-      <style>{spinAnimation}</style>
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.1)',
-        borderRadius: '8px',
-        padding: '20px',
-        marginBottom: '20px',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          marginBottom: '20px'
-        }}>
-          <h3 style={{ 
-            margin: '0', 
-            color: '#fff', 
-            fontSize: '18px',
-            fontWeight: '500'
-          }}>
-            Search & Filters
-          </h3>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h3 className={styles.title}>
+          Search & Filters
+        </h3>
+      </div>
         
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '15px',
-          marginBottom: '20px',
-          flexWrap: 'wrap',
-          alignItems: 'flex-end'
-        }}>
-          {/* Combined Search Input */}
-          <div style={{ flex: '1', minWidth: '200px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '5px', 
-              color: '#fff', 
-              fontSize: '12px',
-              fontWeight: '500'
-            }}>
+        <div className={styles.filtersRow}>
+          <div className={styles.searchInput}>
+            <label className={styles.label}>
               Search Promotions & User Groups
             </label>
             <input
@@ -116,41 +75,19 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
               placeholder="Search by promotion name or user group..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px',
-                borderRadius: '4px',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: '#fff',
-                fontSize: '14px',
-              }}
+              className={styles.input}
             />
           </div>
 
           {/* Type Filter */}
-          <div style={{ flex: '0 0 150px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '5px', 
-              color: '#fff', 
-              fontSize: '12px',
-              fontWeight: '500'
-            }}>
+          <div className={styles.typeFilter}>
+            <label className={styles.label}>
               Type
             </label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px',
-                borderRadius: '4px',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: '#fff',
-                fontSize: '14px',
-              }}
+              className={styles.input}
             >
               <option value="">All Types</option>
               {promotionTypes.map(type => (
@@ -162,111 +99,47 @@ export default function PromotionsFilters({ onFiltersChange }: PromotionsFilters
           </div>
 
           {/* Start Date */}
-          <div style={{ flex: '0 0 150px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '5px', 
-              color: '#fff', 
-              fontSize: '12px',
-              fontWeight: '500'
-            }}>
+          <div className={styles.startDate}>
+            <label className={styles.label}>
               Start Date
             </label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px',
-                borderRadius: '4px',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: '#fff',
-                fontSize: '14px',
-              }}
+              className={styles.input}
             />
           </div>
 
           {/* End Date */}
-          <div style={{ flex: '0 0 150px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '5px', 
-              color: '#fff', 
-              fontSize: '12px',
-              fontWeight: '500'
-            }}>
+          <div className={styles.endDate}>
+            <label className={styles.label}>
               End Date
             </label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px',
-                borderRadius: '4px',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: '#fff',
-                fontSize: '14px',
-              }}
+              className={styles.input}
             />
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div style={{
-          display: 'flex',
-          gap: '10px',
-          justifyContent: 'flex-end'
-        }}>
+        <div className={styles.actions}>
           <button
             onClick={clearFilters}
-            style={{
-              padding: '10px 20px',
-              borderRadius: '4px',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              background: 'rgba(255, 255, 255, 0.1)',
-              color: '#fff',
-              fontSize: '14px',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-            }}
+            className={styles.button}
           >
             Clear Filters
           </button>
           <button
             onClick={applyFilters}
-            style={{
-              padding: '10px 20px',
-              borderRadius: '4px',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              background: 'rgba(255, 255, 255, 0.2)',
-              color: '#fff',
-              fontSize: '14px',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontWeight: '500',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-            }}
+            className={styles.primaryButton}
           >
             Apply Filters
           </button>
         </div>
       </div>
-    </>
   );
 } 
