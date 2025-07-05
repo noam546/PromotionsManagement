@@ -25,6 +25,21 @@
   max-width: 150px;
 }
 
+.typeSelect {
+  width: 100%;
+  padding: 10px;
+  border-radius: 28px;
+  border: 1px solid rgb(154, 154, 154) ;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  max-height: 38px;
+  &::placeholder{
+    color: #ffffff;
+  }
+  
+}
+
 .startDate {
     display: flex;
     flex: 1;
@@ -39,6 +54,7 @@
     flex: 1;
     min-width: 100px;
     max-width: 200px;
+
 }
 
 .input {
@@ -53,6 +69,11 @@
   &::placeholder{
     color: #ffffff;
   }
+  
+}
+
+input[type="date"].input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }
 
 .button {
@@ -81,4 +102,4 @@
   &:hover {
     background:#2d93ff;
   }
-} 
+}

@@ -54,7 +54,7 @@ export default function PromotionsFilters({
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className={styles.input}
+              className={styles.typeSelect}
             >
               <option value="">All Types</option>
               {promotionTypes.map(type => (
