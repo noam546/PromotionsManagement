@@ -113,7 +113,6 @@ WebSocket settings can be customized in `src/api/websocket.ts`:
 export class WebSocketService {
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
-  // Exponential backoff with max 30s delay
 }
 ```
 
@@ -129,7 +128,7 @@ export class WebSocketService {
 - `@tanstack/react-virtual`: ^3.13.12
 - `socket.io-client`: ^4.8.1
 
-## 🚀 Performance Features
+## Performance Features
 
 - **Virtualized Table**: Only renders visible rows for optimal performance
 - **Infinite Scrolling**: Loads data on-demand to handle large datasets
