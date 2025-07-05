@@ -83,12 +83,21 @@ export default function PromotionsFilters({
                         color: 'inherit',
                         height: '40px',
                         padding: '0',
+                        display: 'flex',
+                        alignItems: 'center',
                       },
                       '& .MuiOutlinedInput-input': {
                         padding: '8px 12px',
+                        display: 'flex',
+                        alignItems: 'center',
                       },
                       '& .MuiInputLabel-root': {
                         color: 'inherit',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                      },
+                      '& .MuiSvgIcon-root': {
+                        color: '#fff',
                       },
                     },
                     InputProps: {
