@@ -3,10 +3,11 @@ import { TextField, Select, Button } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export const Container = styled.div`
-  width: calc(100% - 30px);
+  align-self: flex-start;
   display: flex;
   flex-flow: row;
   gap: 15px;
+  margin-left: 9px;
   align-items: flex-end;
   padding-right: 24px;
 `;
@@ -114,6 +115,10 @@ export const StyledDatePicker = styled(DatePicker)`
     line-height: 40px;
     box-sizing: border-box;
   }
+
+  '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
+    color: '#00bcd4',
+  },
   
   & .MuiInputLabel-root {
     top: -6px;
