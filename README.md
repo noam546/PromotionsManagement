@@ -69,12 +69,6 @@ src/
 
 The application will be available at `http://localhost:3000`
 
-### Build for Production
-
-```bash
-yarn build
-```
-
 ## Usage
 
 ### Main Features
@@ -99,13 +93,17 @@ yarn build
 
 ### Environment Variables
 
-The application uses a proxy configuration for API calls:
+Create a `.env` file in the root directory with the following variables:
 
-```json
-{
-  "proxy": "http://localhost:8000"
-}
+```env
+# API Base URL for REST endpoints
+REACT_APP_API_BASE_URL=http://localhost:8000
+
+# WebSocket URL for real-time updates
+REACT_APP_WEBSOCKET_URL=http://localhost:8000
 ```
+
+**Note**: All environment variables must be prefixed with `REACT_APP_` to be accessible in the React application.
 
 ### WebSocket Configuration
 
