@@ -98,11 +98,9 @@ export default function PromotionsFilters({
             />
           </div>
 
-        {/* Action Buttons */}
-        <div className={styles.actions}>
         <button
             onClick={applyFilters}
-            className={styles.primaryButton}
+            className={styles.applyButton}
           >
             Apply
           </button>
@@ -113,7 +111,6 @@ export default function PromotionsFilters({
             Clear
           </button>
           
-        </div>
       </div>
   );
 } 
