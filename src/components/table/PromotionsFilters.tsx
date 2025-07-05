@@ -34,6 +34,7 @@ export default function PromotionsFilters({
 }: PromotionsFiltersProps) {
   return (
         <div className={styles.container}>
+          {/* Search Input */}
           <div className={styles.searchInput}>
             <input
               type="text"
